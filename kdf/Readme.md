@@ -3,8 +3,6 @@
 > 💡 This is a hacspec representation of the [HPKE RFC].
 > The text is mostly verbatim from the RFC with changes where required.
 > It demonstrates the possibilities of hacspec for specifications.
->
-> At this point [HPKE RFC] is in the [publication queue] and not a published RFC yet.
 
 A Key Derivation Function (KDF):
 

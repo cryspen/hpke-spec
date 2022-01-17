@@ -5,7 +5,7 @@ edition = "2018"
 
 [lib]
 path = "src/hpke.rs"
-# crate-type = ["rlib", "cdylib"] # XXX: uncomment for wasm_demo
+crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }

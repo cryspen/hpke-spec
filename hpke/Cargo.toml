@@ -9,11 +9,8 @@ crate-type = ["rlib", "cdylib"]
 
 [dependencies]
 hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }
-
-hpke_errors = { path = "../errors" }
-hpke_kdf = { path = "../kdf" }
-hpke_kem = { path = "../kem" }
-hpke_aead = { path = "../aead" }
+hacspec_cryptolib = { path = "../hacspec_cryptolib" }
+evercrypt_cryptolib = { path = "../evercrypt_cryptolib", optional = true }
 
 # WASM bindgen to get binding for JS
 wasm-bindgen = { version = "0.2", optional = true }
@@ -26,6 +23,7 @@ getrandom = { version = "0.2", features = ["js"] }
 
 [features]
 wasm = ["wasm-bindgen"]
+evercrypt = ["evercrypt_cryptolib"]
 
 [[bench]]
 name = "bench"

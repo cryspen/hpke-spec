@@ -5,12 +5,15 @@ use std::{fs::File, io::BufReader, time::Instant};
 
 use hacspec_lib::*;
 
-use hpke::{Mode::*, *};
-use hpke_aead::AEAD::{self};
-use hpke_kdf::KDF::{self};
-use hpke_kem::{
-    DeriveKeyPair, DeserializePublicKey, SerializePublicKey,
-    KEM::{self},
+use hpke::{
+    aead::AEAD,
+    kdf::KDF::{self},
+    kem::{
+        DeriveKeyPair, DeserializePublicKey, SerializePublicKey,
+        KEM::{self},
+    },
+    Mode::*,
+    *,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

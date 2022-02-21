@@ -1,4 +1,4 @@
-#![doc = include_str!("../Readme.md")]
+#![doc = include_str!("../kdf.md")]
 #![allow(non_snake_case, non_camel_case_types)]
 
 #[cfg(feature = "evercrypt")]
@@ -6,8 +6,7 @@ use evercrypt_cryptolib::*;
 #[cfg(not(feature = "evercrypt"))]
 use hacspec_cryptolib::*;
 use hacspec_lib::*;
-
-use hpke_errors::*;
+use crate::*;
 
 type CryptoResult = Result<ByteSeq, CryptoError>;
 

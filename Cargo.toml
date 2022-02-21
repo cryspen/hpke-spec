@@ -1,19 +1,11 @@
 [workspace]
 members = [
-    "aead",
-    "errors",
     "evercrypt_cryptolib",
     "hacspec_cryptolib",
     "hpke",
-    "kdf",
-    "kem",
 ]
 
 default-members = [
-    "aead",
-    "errors",
     "hacspec_cryptolib",
     "hpke",
-    "kdf",
-    "kem",
 ]

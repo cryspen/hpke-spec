@@ -241,7 +241,7 @@ let key_schedule
   : context_result_t =
   match (verify_psk_inputs (config_17) (psk_20) (psk_id_21)) with
   | Err x -> Err x
-  | Ok  _ : () ->
+  | Ok  _  ->
     let HPKEConfig_hpke_config_t (
         (mode_22, kem_23, kdf_24, aead_25)) : hpke_config_t =
       config_17

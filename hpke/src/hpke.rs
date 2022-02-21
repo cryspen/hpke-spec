@@ -5,11 +5,14 @@
 
 use hacspec_lib::*;
 
-use hpke_aead::*;
-use hpke_kdf::*;
-use hpke_kem::*;
-
-use hpke_errors::*;
+pub mod aead;
+pub mod errors;
+pub mod kdf;
+pub mod kem;
+use aead::*;
+use errors::*;
+use kdf::*;
+use kem::*;
 
 // === Constants ===
 
@@ -258,7 +261,7 @@ pub fn VerifyPSKInputs(config: HPKEConfig, psk: &Psk, psk_id: &PskId) -> EmptyRe
 ///
 /// The `psk`, `psk_id`, and `info` fields have maximum lengths that depend
 /// on the KDF itself, on the definition of [`LabeledExtract()`], and on the
-/// constant labels used together with them. See [KDF Input Length](mod@hpke_kdf#input-length-restrictions) for
+/// constant labels used together with them. See [KDF Input Length](mod@kdf#input-length-restrictions) for
 /// precise limits on these lengths.
 ///
 /// The `key`, `base_nonce`, and `exporter_secret` computed by the key schedule
@@ -269,7 +272,7 @@ pub fn VerifyPSKInputs(config: HPKEConfig, psk: &Psk, psk_id: &PskId) -> EmptyRe
 /// In the Auth and AuthPSK modes, the recipient is assured that the sender
 /// held the private key `skS`. This assurance is limited for the DHKEM
 /// variants defined in this document because of key-compromise impersonation,
-/// as described in [`mod@hpke_kem#dh-based-kem`] and the [security properties section](crate#security-properties). If in the PSK and
+/// as described in [`mod@kem#dh-based-kem`] and the [security properties section](crate#security-properties). If in the PSK and
 /// AuthPSK modes, the `psk` and `psk_id` arguments are provided as required,
 /// then the recipient is assured that the sender held the corresponding
 /// pre-shared key. See the security properties section on the [module page](`crate`) for more details.
@@ -489,21 +492,21 @@ pub fn SetupPSKR(
 ///
 /// This variant extends the base mechanism by allowing the recipient
 /// to authenticate that the sender possessed a given KEM private key.
-/// This is because [`AuthDecap(enc, skR, pkS)`](`hpke_kem::AuthDecap()`) produces the correct KEM
+/// This is because [`AuthDecap(enc, skR, pkS)`](`kem::AuthDecap()`) produces the correct KEM
 /// shared secret only if the encapsulated value `enc` was produced by
-/// [`AuthEncap(pkR, skS)`](`hpke_kem::AuthEncap()`), where `skS` is the private key corresponding
+/// [`AuthEncap(pkR, skS)`](`kem::AuthEncap()`), where `skS` is the private key corresponding
 /// to `pkS`.  In other words, at most two entities (precisely two, in the case
 /// of DHKEM) could have produced this secret, so if the recipient is at most one, then
 /// the sender is the other with overwhelming probability.
 ///
 /// The primary difference from the base case is that the calls to
-/// `Encap()` and `Decap()` are replaced with calls to [`AuthEncap()`](`hpke_kem::AuthEncap()`) and
-/// [`AuthDecap()`](`hpke_kem::AuthDecap()`), which add the sender public key to their internal
+/// `Encap()` and `Decap()` are replaced with calls to [`AuthEncap()`](`kem::AuthEncap()`) and
+/// [`AuthDecap()`](`kem::AuthDecap()`), which add the sender public key to their internal
 /// context string. The function parameters `pkR` and `pkS` are
 /// public keys, and `enc` is an encapsulated KEM shared secret.
 ///
 /// Obviously, this variant can only be used with a KEM that provides
-/// [`AuthEncap()`](`hpke_kem::AuthEncap()`) and [`AuthDecap()`](`hpke_kem::AuthDecap()`) procedures.
+/// [`AuthEncap()`](`kem::AuthEncap()`) and [`AuthDecap()`](`kem::AuthDecap()`) procedures.
 ///
 /// This mechanism authenticates only the key pair of the sender, not
 /// any other identifier.  If an application wishes to bind HPKE
@@ -773,7 +776,7 @@ pub fn IncrementSeq(aead_id: AEAD, seq: SequenceCounter) -> Result<SequenceCount
 ///
 /// The `exporter_context` field has a maximum length that depends on the KDF
 /// itself, on the definition of `LabeledExpand()`, and on the constant labels
-/// used together with them. See [KDF Input Length](mod@hpke_kdf#input-length-restrictions)
+/// used together with them. See [KDF Input Length](mod@kdf#input-length-restrictions)
 /// for precise limits on this length.
 ///
 /// ```text

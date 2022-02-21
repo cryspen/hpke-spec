@@ -1,8 +1,5 @@
 use hacspec_lib::*;
-use hpke::{Mode::*, *};
-use hpke_aead::AEAD::*;
-use hpke_kdf::KDF::*;
-use hpke_kem::KEM::*;
+use hpke::{aead::AEAD::*, kdf::KDF::*, kem::KEM::*, Mode::*, *};
 
 #[test]
 fn single_kat_base() {

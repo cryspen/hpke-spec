@@ -77,15 +77,15 @@ operations, roles, and behaviors of HPKE:
 
 HPKE variants rely on the following primitives:
 
-- A Key Encapsulation Mechanism ([KEM](`mod@hpke_kem`))
-- A Key Derivation Function ([KDF](`hpke_kdf`))
-- An [AEAD](`hpke_aead`) encryption algorithm [RFC5116]
+- A Key Encapsulation Mechanism ([KEM](`mod@kem`))
+- A Key Derivation Function ([KDF](`mod@kdf`))
+- An [AEAD](`mod@aead`) encryption algorithm [RFC5116]
 
 A _ciphersuite_ is a triple (KEM, KDF, AEAD) containing a choice of algorithm
 for each primitive.
 
 A set of algorithm identifiers for concrete instantiations of these
-primitives is provided in [KEM](`hpke_kem::KEM`), [KDF](`hpke_kdf::KDF`), and [AEAD](`hpke_aead::AEAD`).
+primitives is provided in [KEM](`kem::KEM`), [KDF](`kdf::KDF`), and [AEAD](`aead::AEAD`).
 Algorithm identifier values are two bytes long.
 Future specifications may introduce new KEM, KDF, and AEAD algorithm
 identifiers and retain the security guarantees presented in this document.
@@ -112,8 +112,8 @@ provides Additional Authenticated Data to the [`AEAD`] algorithm in use.
 In addition to the base case of encrypting to a public key, we
 include three authenticated variants, one which authenticates
 possession of a pre-shared key, one which authenticates
-possession of a [KEM](`mod@hpke_kem`) private key, and one which authenticates possession of both
-a pre-shared key and a [KEM](`mod@hpke_kem`) private key. All authenticated variants contribute
+possession of a [KEM](`mod@kem`) private key, and one which authenticates possession of both
+a pre-shared key and a [KEM](`mod@kem`) private key. All authenticated variants contribute
 additional keying material to the encryption operation. The following one-byte
 values will be used to distinguish between modes:
 
@@ -150,7 +150,7 @@ details.
 Note that some KEMs may not support [`AuthEncap()`] or [`AuthDecap()`].
 For such KEMs, only `mode_base` or `mode_psk` are supported. Future specifications
 which define new KEMs MUST indicate whether these modes are supported.
-See [Future KEMs](mod@hpke_kem#future-kems) for more details.
+See [Future KEMs](mod@kem#future-kems) for more details.
 
 The procedures described in this section are laid out in a
 Python-like pseudocode. The algorithms in use are left implicit.
@@ -232,10 +232,10 @@ be empty.
 This section lists algorithm identifiers suitable for different HPKE configurations.
 Future specifications may introduce new KEM, KDF, and AEAD algorithm identifiers
 and retain the security guarantees presented in this document provided they adhere
-to the security requirements in [KEM Security](mod@hpke_kem#security-requirements-on-a-kem-used-within-hpke), [KDF Security](mod@hpke_kdf#security-requirements-on-a-kdf), and
-[AEAD Security](mod@hpke_aead#security-requirements-on-an-aead), respectively.
+to the security requirements in [KEM Security](mod@kem#security-requirements-on-a-kem-used-within-hpke), [KDF Security](mod@kdf#security-requirements-on-a-kdf), and
+[AEAD Security](mod@aead#security-requirements-on-an-aead), respectively.
 
-See [KDF](mod@hpke_kdf), [KEM](mod@hpke_kem), and [AEAD](mod@hpke_aead) for details on the algorithms.
+See [KDF](mod@kdf), [KEM](mod@kem), and [AEAD](mod@aead) for details on the algorithms.
 
 # API Considerations
 
@@ -262,7 +262,7 @@ only expose single-shot APIs should not allow applications to use both Setup `in
 
 The high-level, public HPKE APIs specified in this document are all fallible.
 
-See [Errors](mod@hpke_errors) for details.
+See [Errors](mod@errors) for details.
 
 # Message Encoding
 

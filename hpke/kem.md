@@ -122,7 +122,7 @@ The KDF used in DHKEM can be equal to or different from the KDF used
 in the remainder of HPKE, depending on the chosen variant.
 Implementations MUST make sure to use the constants (`Nh`) and function
 calls ([`LabeledExtract`], [`LabeledExpand`]) of the appropriate KDF when
-implementing DHKEM. See [`kdf`](`mod@hpke_kdf`) for a comment on the choice of
+implementing DHKEM. See [`kdf`](`mod@crate::kdf`) for a comment on the choice of
 a KDF for the remainder of HPKE, and the
 rationale of the labels.
 

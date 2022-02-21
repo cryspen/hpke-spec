@@ -194,40 +194,13 @@ let secret_to_public
   (group_name_11 : named_group_t)
   (x_12 : dh_sk_t)
   : dh_pk_result_t =
-  match group_name_11 with
-  | Secp256r1_named_group_t -> match p256_point_mul_base (
-    nat_from_byte_seq_be (0xunknown) (0) (x_12)) with
-  | Ok (x_13, y_14) -> Ok (
-    seq_concat (nat_to_byte_seq_be (0xunknown) (0) (x_13)) (
-      nat_to_byte_seq_be (0xunknown) (0) (y_14)))
-  | Err _ -> Err (crypto_error_v)
-  | X25519_named_group_t -> Ok (
-    seq_from_seq (x25519_secret_to_public (array_from_seq (32) (x_12))))
-  | X448_named_group_t -> Err (unsupported_algorithm_v)
-  | Secp384r1_named_group_t -> Err (unsupported_algorithm_v)
-  | Secp521r1_named_group_t -> Err (unsupported_algorithm_v)
+  admit
 
 let p256_check_point_len (p_15 : dh_pk_t) : empty_result_t =
   if ((seq_len (p_15)) <> (usize 64)) then (Err (crypto_error_v)) else (Ok (()))
 
 let p256_ecdh (x_16 : dh_sk_t) (y_17 : dh_pk_t) : crypto_byte_seq_result_t =
-  match (p256_check_point_len (y_17)) with
-  | Err x -> Err x
-  | Ok  _ : () ->
-    let pk_18 : (p256_field_element_t & p256_field_element_t) =
-      (
-        nat_from_byte_seq_be (0xunknown) (0) (
-          seq_slice_range (y_17) ((usize 0, usize 32))),
-        nat_from_byte_seq_be (0xunknown) (0) (
-          seq_slice_range (y_17) ((usize 32, usize 64)))
-      )
-    in
-    match p256_point_mul (nat_from_byte_seq_be (0xunknown) (0) (x_16)) (
-      pk_18) with
-    | Ok (x_19, y_20) -> Ok (
-      seq_concat (nat_to_byte_seq_be (0xunknown) (0) (x_19)) (
-        nat_to_byte_seq_be (0xunknown) (0) (y_20)))
-    | Err _ -> Err (crypto_error_v)
+  admit
 
 let ecdh
   (group_name_21 : named_group_t)
@@ -245,52 +218,7 @@ let ecdh
   | Secp521r1_named_group_t -> Err (unsupported_algorithm_v)
 
 let valid_p256_private_key (k_24 : byte_seq) : bool =
-  let k_element_25 : p256_scalar_t =
-    nat_from_byte_seq_be (0xunknown) (0) (k_24)
-  in
-  let k_element_bytes_26 : seq uint8 =
-    nat_to_byte_seq_be (0xunknown) (0) (k_element_25)
-  in
-  let valid_27 : bool =
-    (seq_len (k_element_bytes_26)) = (seq_len (k_24))
-  in
-  let all_zero_28 : bool =
-    true
-  in
-  let (valid_27, all_zero_28) =
-    if valid_27 then begin
-      let (valid_27, all_zero_28) =
-        foldi (usize 0) (seq_len (k_24)) (fun i_29 (valid_27, all_zero_28) ->
-          let (all_zero_28) =
-            if not (
-              uint8_equal (seq_index (k_24) (i_29)) (
-                secret (pub_u8 0x0))) then begin
-              let all_zero_28 =
-                false
-              in
-              (all_zero_28)
-            end else begin (all_zero_28)
-            end
-          in
-          let (valid_27) =
-            if not (
-              uint8_equal (seq_index (k_element_bytes_26) (i_29)) (
-                seq_index (k_24) (i_29))) then begin
-              let valid_27 =
-                false
-              in
-              (valid_27)
-            end else begin (valid_27)
-            end
-          in
-          (valid_27, all_zero_28))
-        (valid_27, all_zero_28)
-      in
-      (valid_27, all_zero_28)
-    end else begin (valid_27, all_zero_28)
-    end
-  in
-  (valid_27) && (not (all_zero_28))
+  admit
 
 let valid_private_key
   (named_group_30 : named_group_t)

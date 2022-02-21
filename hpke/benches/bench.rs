@@ -1,10 +1,12 @@
 use std::time::{Duration, Instant};
 
 use hacspec_lib::ByteSeq;
-use hpke::*;
-use hpke_aead::*;
-use hpke_kdf::KDF;
-use hpke_kem::{GenerateKeyPair, KEM};
+use hpke::{
+    aead::*,
+    kdf::KDF,
+    kem::{GenerateKeyPair, KEM},
+    *,
+};
 use rand::{rngs::OsRng, RngCore};
 
 fn duration(d: Duration) -> f64 {

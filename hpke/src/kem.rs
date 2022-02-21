@@ -1,15 +1,13 @@
-#![doc = include_str!("../Readme.md")]
-#![doc = include_str!("../Security.md")]
+#![doc = include_str!("../kem.md")]
+#![doc = include_str!("../kem-security.md")]
 #![allow(non_camel_case_types, non_snake_case)]
 
+use crate::*;
 #[cfg(feature = "evercrypt")]
 use evercrypt_cryptolib::*;
 #[cfg(not(feature = "evercrypt"))]
 use hacspec_cryptolib::*;
 use hacspec_lib::*;
-use hpke_kdf::*;
-
-use hpke_errors::*;
 
 type CryptoResult = Result<ByteSeq, CryptoError>;
 
@@ -408,7 +406,7 @@ pub fn DeriveKeyPairX(alg: KEM, ikm: &InputKeyMaterial) -> Result<KeyPair, HpkeE
 /// `bitmask` is defined to be 0xFF for P-256 and P-384, and 0x01 for P-521.
 /// The precise likelihood of `DeriveKeyPair()` failing with DeriveKeyPairError
 /// depends on the group being used, but it is negligibly small in all cases.
-/// See [hpke errors](`mod@hpke_errors`) for information about dealing with such failures.
+/// See [hpke errors](`mod@crate::errors`) for information about dealing with such failures.
 ///
 /// For X25519 and X448, the [`DeriveKeyPair()`] function applies a KDF to the input:
 ///

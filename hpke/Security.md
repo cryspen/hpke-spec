@@ -109,7 +109,7 @@ and the DH group and KDF satisfy the following conditions:
   argument is the key.
 
 In particular, the KDFs and DH groups defined in this document (see
-[kdf-ids](`hpke_kdf::KDF`) and [kem-ids](`hpke_kem::KEM`)) satisfy these properties when used as
+[kdf-ids](`kdf::KDF`) and [kem-ids](`kem::KEM`)) satisfy these properties when used as
 specified. The analysis in [HPKEAnalysis] demonstrates that under these
 constraints, HPKE continues to provide IND-CCA2 security, and provides
 the additional properties noted above. Also, the analysis confirms the
@@ -139,7 +139,7 @@ encryption API has been done in [ABHKLR20].
 The paper defines security notions for authenticated
 KEMs and for authenticated public key encryption, using the outsider and
 insider security terminology known from signcryption [SigncryptionDZ10].
-The analysis proves that DHKEM's [`AuthEncap()`](<`hpke_kem::AuthEncap()`>)/[`AuthDecap()`](<`hpke_kem::AuthDecap()`>) interface
+The analysis proves that DHKEM's [`AuthEncap()`](<`kem::AuthEncap()`>)/[`AuthDecap()`](<`kem::AuthDecap()`>) interface
 fulfills these notions for all Diffie-Hellman groups specified in this document,
 and indicates exact security bounds, under the assumption that the
 gap Diffie-Hellman (GDH) problem is hard in the appropriate subgroup [GAP],
@@ -185,8 +185,8 @@ oracle model.
 ## Pre-Shared Key Recommendations
 
 In the PSK and AuthPSK modes, the PSK MUST have at least 32 bytes of
-entropy and SHOULD be of length [`Nh`](<`hpke_kdf::Nh()`>) bytes or longer. Using a PSK longer than
-32 bytes but shorter than [`Nh`](<`hpke_kdf::Nh()`>) bytes is permitted.
+entropy and SHOULD be of length [`Nh`](<`kdf::Nh()`>) bytes or longer. Using a PSK longer than
+32 bytes but shorter than [`Nh`](<`kdf::Nh()`>) bytes is permitted.
 
 HPKE is specified to use HKDF as key derivation function. HKDF is not
 designed to slow down dictionary attacks, see [RFC5869]. Thus, HPKE's

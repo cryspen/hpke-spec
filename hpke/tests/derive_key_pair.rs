@@ -1,5 +1,5 @@
 use hacspec_lib::*;
-use hpke_kem::{KEM::*, *};
+use hpke::kem::{KEM::*, *};
 
 #[test]
 fn derive_x25519() {

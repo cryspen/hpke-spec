@@ -4,7 +4,7 @@ WASM and hacpsec doesn't play nicely together yet.
 
 ### Setup
 
-- Comment out the `evercrypt_cryptolib` in `hpke_aead`, `hpke_kem`, and `hpke_kdf`
+- Comment out `evercrypt_cryptolib` in the `hpke` `Cargo.toml`.
 - Uncomment the `crate-type` in the `hpke` `Cargo.toml`.
 - Uncomment the code in `hpke.rs` below "WASM API".
 

@@ -1,5 +1,5 @@
 use hacspec_lib::*;
-use hpke_kem::*;
+use hpke::kem::*;
 
 #[test]
 fn self_test() {

@@ -27,8 +27,4 @@ fi
 
 # Typecheck and extract
 cargo hacspec -o fstar/Hacspec.Cryptolib.fst hacspec_cryptolib
-cargo hacspec -o fstar/Aead.fst hpke_aead
-cargo hacspec -o fstar/Hpke.Errors.fst hpke_errors
-cargo hacspec -o fstar/Kdf.fst hpke_kdf
-cargo hacspec -o fstar/Kem.fst hpke_kem
 cargo hacspec -o fstar/Hpke.fst hpke

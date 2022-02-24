@@ -3,7 +3,7 @@ name: GH Pages
 on:
   push:
     branches:
-      - main
+      - setup-gh-pages
   workflow_dispatch:
 
 jobs:

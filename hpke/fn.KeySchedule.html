@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Creating the Encryption Context"><meta name="keywords" content="rust, rustlang, rust-lang, KeySchedule"><title>KeySchedule in hpke - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="index.html">hpke</a></h2><div id="sidebar-vars" data-name="KeySchedule" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Function <a href="index.html">hpke</a>::<wbr><a class="fn" href="#">KeySchedule</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke/hpke.rs.html#317-373" title="goto source code">[src]</a></span></h1><div class="docblock item-decl"><pre class="rust fn"><code>pub fn KeySchedule(<br>&nbsp;&nbsp;&nbsp;&nbsp;config: <a class="struct" href="struct.HPKEConfig.html" title="struct hpke::HPKEConfig">HPKEConfig</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;shared_secret: &amp;<a class="type" href="../hpke_kem/type.SharedSecret.html" title="type hpke_kem::SharedSecret">SharedSecret</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;info: &amp;<a class="type" href="../hpke_kdf/type.Info.html" title="type hpke_kdf::Info">Info</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;psk: &amp;<a class="type" href="type.Psk.html" title="type hpke::Psk">Psk</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;psk_id: &amp;<a class="type" href="type.PskId.html" title="type hpke::PskId">PskId</a><br>) -&gt; <a class="type" href="type.ContextResult.html" title="type hpke::ContextResult">ContextResult</a></code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h3 id="creating-the-encryption-context" class="section-header"><a href="#creating-the-encryption-context">Creating the Encryption Context</a></h3>
+<p>The variants of HPKE defined in this document share a common
+key schedule that translates the protocol inputs into an encryption
+context. The key schedule inputs are as follows:</p>
+<ul>
+<li><code>mode</code> - A one-byte value indicating the HPKE mode, defined in <a href="enum.Mode.html" title="Mode"><code>Mode</code></a>.</li>
+<li><code>shared_secret</code> - A KEM shared secret generated for this transaction.</li>
+<li><code>info</code> - Application-supplied information (optional; default value
+“”).</li>
+<li><code>psk</code> - A pre-shared key (PSK) held by both the sender
+and the recipient (optional; default value “”).</li>
+<li><code>psk_id</code> - An identifier for the PSK (optional; default value “”).</li>
+</ul>
+<p>Senders and recipients MUST validate KEM inputs and outputs as described
+in <a href="../hpke_kem/enum.KEM.html" title="KEM"><code>KEM</code></a>.</p>
+<p>The <code>psk</code> and <code>psk_id</code> fields MUST appear together or not at all.
+That is, if a non-default value is provided for one of them, then
+the other MUST be set to a non-default value. This requirement is
+encoded in <a href="fn.VerifyPSKInputs.html" title="VerifyPSKInputs()"><code>VerifyPSKInputs()</code></a> below.</p>
+<p>The <code>psk</code>, <code>psk_id</code>, and <code>info</code> fields have maximum lengths that depend
+on the KDF itself, on the definition of <a href="../hpke_kdf/fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a>, and on the
+constant labels used together with them. See <a href="../hpke_kdf/index.html#input-length-restrictions">KDF Input Length</a> for
+precise limits on these lengths.</p>
+<p>The <code>key</code>, <code>base_nonce</code>, and <code>exporter_secret</code> computed by the key schedule
+have the property that they are only known to the holder of the recipient
+private key, and the entity that used the KEM to generate <code>shared_secret</code> and
+<code>enc</code>.</p>
+<p>In the Auth and AuthPSK modes, the recipient is assured that the sender
+held the private key <code>skS</code>. This assurance is limited for the DHKEM
+variants defined in this document because of key-compromise impersonation,
+as described in <a href="../hpke_kem/index.html#dh-based-kem" title="hpke_kem"><code>hpke_kem</code></a> and the <a href="index.html#security-properties">security properties section</a>. If in the PSK and
+AuthPSK modes, the <code>psk</code> and <code>psk_id</code> arguments are provided as required,
+then the recipient is assured that the sender held the corresponding
+pre-shared key. See the security properties section on the <a href="index.html">module page</a> for more details.</p>
+<p>The HPKE algorithm identifiers, i.e., the KEM <code>kem_id</code>, KDF <code>kdf_id</code>, and
+AEAD <code>aead_id</code> 2-byte code points as defined in <a href="../hpke_kem/enum.KEM.html" title="KEM"><code>KEM</code></a>, <a href="../hpke_kdf/enum.KDF.html" title="KDF"><code>KDF</code></a>,
+and <a href="../hpke_aead/enum.AEAD.html" title="AEAD"><code>AEAD</code></a>, respectively, are assumed implicit from the implementation
+and not passed as parameters.</p>
+<div class="example-wrap"><pre class="language-text"><code>def KeySchedule&lt;ROLE&gt;(mode, shared_secret, info, psk, psk_id):
+  VerifyPSKInputs(mode, psk, psk_id)
+
+  psk_id_hash = LabeledExtract(&quot;&quot;, &quot;psk_id_hash&quot;, psk_id)
+  info_hash = LabeledExtract(&quot;&quot;, &quot;info_hash&quot;, info)
+  key_schedule_context = concat(mode, psk_id_hash, info_hash)
+
+  secret = LabeledExtract(shared_secret, &quot;secret&quot;, psk)
+
+  key = LabeledExpand(secret, &quot;key&quot;, key_schedule_context, Nk)
+  base_nonce = LabeledExpand(secret, &quot;base_nonce&quot;,
+                             key_schedule_context, Nn)
+  exporter_secret = LabeledExpand(secret, &quot;exp&quot;,
+                                  key_schedule_context, Nh)
+
+  return Context&lt;ROLE&gt;(key, base_nonce, 0, exporter_secret)</code></pre></div>
+<p>The <code>ROLE</code> template parameter is either S or R, depending on the role of
+sender or recipient, respectively. See <a href="fn.ContextS_Seal.html">HPKE DEM</a> for a discussion of the
+key schedule output, including the role-specific <code>Context</code> structure and its API.</p>
+<p>Note that the <code>key_schedule_context</code> construction in <a href="fn.KeySchedule.html" title="KeySchedule()"><code>KeySchedule()</code></a> is
+equivalent to serializing a structure of the following form in the TLS presentation
+syntax:</p>
+<div class="example-wrap"><pre class="language-text"><code>struct {
+    uint8 mode;
+    opaque psk_id_hash[Nh];
+    opaque info_hash[Nh];
+} KeyScheduleContext;</code></pre></div>
+<p>This function takes the <code>&lt;MODE&gt;</code> as argument in <a href="struct.HPKEConfig.html" title="HPKEConfig"><code>HPKEConfig</code></a>.</p>
+</div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

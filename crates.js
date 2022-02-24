@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["hacspec_aes128_gcm","hacspec_chacha20poly1305","hacspec_curve25519","hacspec_hkdf","hacspec_p256","hpke","hpke_aead","hpke_errors","hpke_kdf","hpke_kem"];

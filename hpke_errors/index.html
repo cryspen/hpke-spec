@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="HPKE Errors"><meta name="keywords" content="rust, rustlang, rust-lang, hpke_errors"><title>hpke_errors - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke_errors/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate hpke_errors</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all hpke_errors's items</p></a><div class="block items"><ul><li><a href="#enums">Enums</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="hpke_errors" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">hpke_errors</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke_errors/errors.rs.html#1-101" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="hpke-errors" class="section-header"><a href="#hpke-errors">HPKE Errors</a></h2>
+<p>The high-level, public HPKE APIs specified in this document are all fallible.
+These include the Setup functions and all encryption context functions.
+For example, <code>Decap()</code> can fail if the encapsulated key <code>enc</code> is invalid,
+and <code>Open()</code> may fail if ciphertext decryption fails. The explicit errors
+generated throughout this specification, along with the conditions that
+lead to each error, are as follows:</p>
+<ul>
+<li><code>ValidationError</code>: KEM input or output validation failure.</li>
+<li><code>DeserializeError</code>: Public or private key deserialization failure.</li>
+<li><code>EncapError</code>: <code>Encap()</code> failure.</li>
+<li><code>DecapError</code>: <code>Decap()</code> failure.</li>
+<li><code>OpenError</code>: Context AEAD <code>Open()</code> failure.</li>
+<li><code>MessageLimitReachedError</code>: Context AEAD sequence number overflow.</li>
+<li><code>DeriveKeyPairError</code>: Key pair derivation failure.</li>
+</ul>
+<p>Implicit errors may also occur. As an example, certain classes of failures,
+e.g., malformed recipient public keys, may not yield explicit errors.
+For example, for the DHKEM variant described in this specification,
+the <code>Encap()</code> algorithm fails when given an invalid recipient public key.
+However, other KEM algorithms may not have an efficient algorithm for verifying
+the validity of public keys. As a result, an equivalent error may not manifest
+until AEAD decryption at the recipient. As another example, DHKEM’s <code>AuthDecap()</code>
+function will produce invalid output if given the wrong sender public key.
+This error is not detectable until subsequent AEAD decryption.</p>
+<p>The errors in this document are meant as a guide for implementors. They are not
+an exhaustive list of all the errors an implementation might emit. For example,
+future KEMs might have internal failure cases, or an implementation might run
+out of memory.</p>
+<p>How these errors are expressed in an API or handled by applications is an
+implementation-specific detail. For example, some implementations may abort or
+panic upon a <code>DeriveKeyPairError</code> failure given that it only occurs with
+negligible probability, whereas other implementations may retry the failed
+DeriveKeyPair operation.
+As another example, some implementations of the DHKEM specified in this document
+may choose to transform <code>ValidationError</code> from <code>DH()</code> into an <code>EncapError</code> or
+<code>DecapError</code> from <code>Encap()</code> or <code>Decap()</code>, respectively, whereas others may choose
+to raise <code>ValidationError</code> unmodified.</p>
+<p>Applications using HPKE APIs should not assume that the errors here are complete,
+nor should they assume certain classes of errors will always manifest the same way
+for all ciphersuites. For example, the DHKEM specified in this document will emit
+a <code>DeserializationError</code> or <code>ValidationError</code> if a KEM public key is invalid. However,
+a new KEM might not have an efficient algorithm for determining whether or not a
+public key is valid. In this case, an invalid public key might instead yield an
+<code>OpenError</code> when trying to decrypt a ciphertext.</p>
+<h3 id="exceptions" class="section-header"><a href="#exceptions">Exceptions</a></h3>
+<p>The exceptions raised in the HPKE RFC are modelled as errors here as well:</p>
+<ul>
+<li><code>InconsistentPskInputs</code>: PSK inputs are inconsistent.</li>
+<li><code>UnnecessaryPsk</code>: PSK input provided when not needed.</li>
+<li><code>MissingPsk</code>: Missing required PSK input.</li>
+</ul>
+<h3 id="hacspec-extensions" class="section-header"><a href="#hacspec-extensions">hacspec Extensions</a></h3>
+<p>In order to implement HPKE a number of additional errors are added here:</p>
+<ul>
+<li><code>UnsupportedAlgorithm</code>: An algorithm is not supported by the implementation</li>
+<li><code>InvalidParameters</code>: Parameters to an algorithm are inconsistent or wrong.</li>
+<li><code>CryptoError</code>: An opaque error happened in a crypto operation outside of this code.</li>
+</ul>
+</div></details><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.HpkeError.html" title="hpke_errors::HpkeError enum">HpkeError</a></div><div class="item-right docblock-short"><p>Explicit errors generated throughout this specification.</p>
+</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.HpkeByteSeqResult.html" title="hpke_errors::HpkeByteSeqResult type">HpkeByteSeqResult</a></div><div class="item-right docblock-short"><p>A <a href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="Result"><code>Result</code></a> type that returns a [<code>ByteSeq</code>] or an <a href="enum.HpkeError.html" title="HpkeError"><code>HpkeError</code></a>.</p>
+</div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke_errors" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="DeriveKeyPair"><meta name="keywords" content="rust, rustlang, rust-lang, DeriveKeyPair"><title>DeriveKeyPair in hpke_kem - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke_kem/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><h2 class="location">Other items in<br><a href="index.html">hpke_kem</a></h2><div id="sidebar-vars" data-name="DeriveKeyPair" data-ty="fn" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Function <a href="index.html">hpke_kem</a>::<wbr><a class="fn" href="#">DeriveKeyPair</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke_kem/kem.rs.html#423-466" title="goto source code">[src]</a></span></h1><div class="docblock item-decl"><pre class="rust fn"><code>pub fn DeriveKeyPair(<br>&nbsp;&nbsp;&nbsp;&nbsp;alg: <a class="enum" href="enum.KEM.html" title="enum hpke_kem::KEM">KEM</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;ikm: &amp;<a class="type" href="../hpke_kdf/type.InputKeyMaterial.html" title="type hpke_kdf::InputKeyMaterial">InputKeyMaterial</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="type" href="type.KeyPair.html" title="type hpke_kem::KeyPair">KeyPair</a>, <a class="enum" href="../hpke_errors/enum.HpkeError.html" title="enum hpke_errors::HpkeError">HpkeError</a>&gt;</code></pre></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h4 id="derivekeypair" class="section-header"><a href="#derivekeypair">DeriveKeyPair</a></h4>
+<p>The keys that <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> produces have only as much entropy as the provided
+input keying material. For a given KEM, the <code>ikm</code> parameter given to <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> SHOULD
+have length at least <a href="fn.Nsk.html" title="Nsk"><code>Nsk</code></a>, and SHOULD have at least <a href="fn.Nsk.html" title="Nsk"><code>Nsk</code></a> bytes of entropy.</p>
+<p>All invocations of KDF functions (such as <a href="../hpke_kdf/fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> or <a href="../hpke_kdf/fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a>) in any
+DHKEM’s <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> function use the DHKEM’s associated KDF (as opposed to
+the ciphersuite’s KDF).</p>
+<p>For P-256, P-384 and P-521, the <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> function of the KEM performs
+rejection sampling over field elements.</p>
+<div class="example-wrap"><pre class="language-text"><code>def DeriveKeyPair(ikm):
+  dkp_prk = LabeledExtract(&quot;&quot;, &quot;dkp_prk&quot;, ikm)
+  sk = 0
+  counter = 0
+  while sk == 0 or sk &gt;= order:
+    if counter &gt; 255:
+      raise DeriveKeyPairError
+    bytes = LabeledExpand(dkp_prk, &quot;candidate&quot;,
+                          I2OSP(counter, 1), Nsk)
+    bytes[0] = bytes[0] &amp; bitmask
+    sk = OS2IP(bytes)
+    counter = counter + 1
+  return (sk, pk(sk))</code></pre></div>
+<p><code>order</code> is the order of the curve being used (see section D.1.2 of <a href="https://doi.org/10.6028/nist.fips.186-4">NISTCurves</a>), and
+is listed below for completeness.</p>
+<div class="example-wrap"><pre class="language-text"><code>P-256:
+0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551
+
+P-384:
+0xffffffffffffffffffffffffffffffffffffffffffffffffc7634d81f4372ddf
+  581a0db248b0a77aecec196accc52973
+
+P-521:
+0x01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  fa51868783bf2f966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409</code></pre></div>
+<p><code>bitmask</code> is defined to be 0xFF for P-256 and P-384, and 0x01 for P-521.
+The precise likelihood of <code>DeriveKeyPair()</code> failing with DeriveKeyPairError
+depends on the group being used, but it is negligibly small in all cases.
+See <a href="../hpke_errors/index.html">hpke errors</a> for information about dealing with such failures.</p>
+<p>For X25519 and X448, the <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> function applies a KDF to the input:</p>
+<div class="example-wrap"><pre class="language-text"><code>def DeriveKeyPair(ikm):
+  dkp_prk = LabeledExtract(&quot;&quot;, &quot;dkp_prk&quot;, ikm)
+  sk = LabeledExpand(dkp_prk, &quot;sk&quot;, &quot;&quot;, Nsk)
+  return (sk, pk(sk))</code></pre></div></div></details></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke_kem" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

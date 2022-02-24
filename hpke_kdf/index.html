@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Key Derivation"><meta name="keywords" content="rust, rustlang, rust-lang, hpke_kdf"><title>hpke_kdf - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke_kdf/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate hpke_kdf</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all hpke_kdf's items</p></a><div class="block items"><ul><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="hpke_kdf" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">hpke_kdf</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke_kdf/kdf.rs.html#1-156" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="key-derivation" class="section-header"><a href="#key-derivation">Key Derivation</a></h2>
+<blockquote>
+<p>💡 This is a hacspec representation of the <a href="https://datatracker.ietf.org/doc/draft-irtf-cfrg-hpke/">HPKE RFC</a>.
+The text is mostly verbatim from the RFC with changes where required.
+It demonstrates the possibilities of hacspec for specifications.</p>
+</blockquote>
+<p>A Key Derivation Function (KDF):</p>
+<ul>
+<li><code>Extract(salt, ikm)</code>: Extract a pseudorandom key of fixed length <code>Nh</code> bytes
+from input keying material <code>ikm</code> and an optional byte string
+<code>salt</code>.</li>
+<li><code>Expand(prk, info, L)</code>: Expand a pseudorandom key <code>prk</code> using
+optional string <code>info</code> into <code>L</code> bytes of output keying material.</li>
+<li><code>Nh</code>: The output size of the <code>Extract()</code> function in bytes.</li>
+</ul>
+<p>HKDF is the only specified KDF and an external dependency: [<code>hacspec-hkdf</code>].</p>
+<h2 id="labeled-hkdf" class="section-header"><a href="#labeled-hkdf">Labeled HKDF</a></h2>
+<p>The following two functions are defined to facilitate domain separation of
+KDF calls as well as context binding:</p>
+<div class="example-wrap"><pre class="language-text"><code>def LabeledExtract(salt, label, ikm):
+  labeled_ikm = concat(&quot;HPKE-v1&quot;, suite_id, label, ikm)
+  return Extract(salt, labeled_ikm)
+
+def LabeledExpand(prk, label, info, L):
+  labeled_info = concat(I2OSP(L, 2), &quot;HPKE-v1&quot;, suite_id,
+                        label, info)
+  return Expand(prk, labeled_info, L)</code></pre></div>
+<p>The value of <code>suite_id</code> depends on where the KDF is used; it is assumed
+implicit from the implementation and not passed as a parameter. If used
+inside a KEM algorithm, <code>suite_id</code> MUST start with “KEM” and identify
+this KEM algorithm; if used in the remainder of HPKE, it MUST start with
+“HPKE” and identify the entire ciphersuite in use.</p>
+<h2 id="security-requirements-on-a-kdf" class="section-header"><a href="#security-requirements-on-a-kdf">Security Requirements on a KDF</a></h2>
+<p>The choice of the KDF for HPKE SHOULD be made based on the security
+level provided by the KEM and, if applicable, by the PSK. The KDF
+SHOULD at least have the security level of the KEM and SHOULD
+at least have the security level provided by the PSK.</p>
+<h3 id="domain-separation" class="section-header"><a href="#domain-separation">Domain Separation</a></h3>
+<p>HPKE allows combining a DHKEM variant <code>DHKEM(Group, KDF')</code> and a KDF
+such that both KDFs are instantiated by the same KDF. By design, the
+calls to <code>Extract()</code> and <code>Expand()</code> inside DHKEM and the remainder of
+HPKE use separate input domains. This justifies modeling them as
+independent functions even if instantiated by the same KDF.
+This domain separation between DHKEM and the remainder of HPKE is achieved by
+the <code>suite_id</code> values in <a href="fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> and <a href="fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a>:
+The values used (<code>KEM...</code> in DHKEM and <code>HPKE...</code> in the remainder of HPKE)
+are prefix-free (a set is prefix-free if no element is a prefix of
+another within the set).</p>
+<p>Future KEM instantiations MUST ensure, should <code>Extract()</code> and
+<code>Expand()</code> be used internally, that they can be modeled as functions
+independent from the invocations of <code>Extract()</code> and <code>Expand()</code> in the
+remainder of HPKE. One way to ensure this is by using <code>LabeledExtract()</code>
+and <code>LabeledExpand()</code> with a <code>suite_id</code> as defined in {{base-crypto}},
+which will ensure input domain separation as outlined above.
+Particular attention needs to
+be paid if the KEM directly invokes functions that are used internally
+in HPKE’s <code>Extract()</code> or <code>Expand()</code>, such as <code>Hash()</code> and <code>HMAC()</code> in the case of HKDF.
+It MUST be ensured that inputs to these invocations cannot collide with
+inputs to the internal invocations of these functions inside <code>Extract()</code> or
+<code>Expand()</code>. In HPKE’s <code>KeySchedule()</code> this is avoided by using <code>Extract()</code> instead of
+<code>Hash()</code> on the arbitrary-length inputs <code>info</code> and <code>psk_id</code>.</p>
+<p>The string literal “HPKE-v1” used in <a href="fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> and <a href="fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a>
+ensures that any secrets derived in HPKE are bound to the scheme’s name
+and version, even when possibly derived from the same Diffie-Hellman or
+KEM shared secret as in another scheme or version.</p>
+<h3 id="input-length-restrictions" class="section-header"><a href="#input-length-restrictions">Input Length Restrictions</a></h3>
+<p>This document defines <a href="fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> and <a href="fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a> based on the
+KDFs listed above. These functions add prefixes to their respective
+inputs <code>ikm</code> and <code>info</code> before calling the KDF’s <code>Extract()</code> and <code>Expand()</code>
+functions. This leads to a reduction of the maximum input length that
+is available for the inputs <code>psk</code>, <code>psk_id</code>, <code>info</code>, <code>exporter_context</code>,
+<code>ikm</code>, i.e., the variable-length parameters provided by HPKE applications.
+The following table lists the maximum allowed lengths of these fields
+for the KDFs defined in this document, as inclusive bounds in bytes:</p>
+<div><table><thead><tr><th align="left">Input</th><th align="left">HKDF-SHA256</th><th align="left">HKDF-SHA384</th><th align="left">HKDF-SHA512</th></tr></thead><tbody>
+<tr><td align="left">psk</td><td align="left">2^{61} - 88</td><td align="left">2^{125} - 152</td><td align="left">2^{125} - 152</td></tr>
+<tr><td align="left">psk_id</td><td align="left">2^{61} - 93</td><td align="left">2^{125} - 157</td><td align="left">2^{125} - 157</td></tr>
+<tr><td align="left">info</td><td align="left">2^{61} - 91</td><td align="left">2^{125} - 155</td><td align="left">2^{125} - 155</td></tr>
+<tr><td align="left">exporter_context</td><td align="left">2^{61} - 120</td><td align="left">2^{125} - 200</td><td align="left">2^{125} - 216</td></tr>
+<tr><td align="left">ikm (DeriveKeyPair)</td><td align="left">2^{61} - 84</td><td align="left">2^{125} - 148</td><td align="left">2^{125} - 148</td></tr>
+</tbody></table>
+</div>
+<p>This shows that the limits are only marginally smaller than the maximum
+input length of the underlying hash function; these limits are large and
+unlikely to be reached in practical applications. Future specifications
+which define new KDFs MUST specify bounds for these variable-length
+parameters.</p>
+<p>The RECOMMENDED limit for these values is 64 bytes. This would enable
+interoperability with implementations that statically allocate memory
+for these inputs to avoid memory allocations.</p>
+<p>The values for <code>psk</code>, <code>psk_id</code>, <code>info</code>, and <code>ikm</code> which are inputs to
+<a href="fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> were computed with the following expression:</p>
+<div class="example-wrap"><pre class="language-text"><code>max_size_hash_input - Nb - size_version_label -
+    size_suite_id - size_input_label</code></pre></div>
+<p>The value for <code>exporter_context</code> which is an input to <a href="fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a>
+was computed with the following expression:</p>
+<div class="example-wrap"><pre class="language-text"><code>max_size_hash_input - Nb - Nh - size_version_label -
+    size_suite_id - size_input_label - 2 - 1</code></pre></div>
+<p>In these equations, <code>max_size_hash_input</code> is the maximum input length
+of the underlying hash function in bytes, <code>Nb</code> is the block size of the
+underlying hash function in bytes, <code>size_version_label</code> is the size
+of “HPKE-v1” in bytes and equals 7, <code>size_suite_id</code> is the size of the
+<code>suite_id</code> in bytes and equals 5 for DHKEM (relevant for <code>ikm</code>) and 10 for the
+remainder of HPKE (relevant for <code>psk</code>, <code>psk_id</code>, <code>info</code>, <code>exporter_context</code>),
+and <code>size_input_label</code> is the size in bytes of the label used as parameter to
+<a href="fn.LabeledExtract.html" title="LabeledExtract()"><code>LabeledExtract()</code></a> or <a href="fn.LabeledExpand.html" title="LabeledExpand()"><code>LabeledExpand()</code></a>, the maximum of which is 13
+across all labels in this document.</p>
+</div></details><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.KDF.html" title="hpke_kdf::KDF enum">KDF</a></div><div class="item-right docblock-short"><p>Key Derivation Functions (KDFs)</p>
+</div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.LabeledExpand.html" title="hpke_kdf::LabeledExpand fn">LabeledExpand</a></div><div class="item-right docblock-short"><p>KDF: Labeled Expand</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.LabeledExtract.html" title="hpke_kdf::LabeledExtract fn">LabeledExtract</a></div><div class="item-right docblock-short"><p>LabeledExtract</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Nh.html" title="hpke_kdf::Nh fn">Nh</a></div><div class="item-right docblock-short"><p>The output size of the <code>Extract()</code> function in bytes.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.kdf_value.html" title="hpke_kdf::kdf_value fn">kdf_value</a></div><div class="item-right docblock-short"><p>Get the numeric value of the <code>kdf_id</code>.</p>
+</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Info.html" title="hpke_kdf::Info type">Info</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.InputKeyMaterial.html" title="hpke_kdf::InputKeyMaterial type">InputKeyMaterial</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke_kdf" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

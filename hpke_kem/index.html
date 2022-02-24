@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Key Encapsulation Mechanism (KEM)"><meta name="keywords" content="rust, rustlang, rust-lang, hpke_kem"><title>hpke_kem - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke_kem/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate hpke_kem</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all hpke_kem's items</p></a><div class="block items"><ul><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="hpke_kem" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">hpke_kem</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke_kem/kem.rs.html#1-581" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="key-encapsulation-mechanism-kem" class="section-header"><a href="#key-encapsulation-mechanism-kem">Key Encapsulation Mechanism (KEM)</a></h2>
+<blockquote>
+<p>💡 This is a hacspec representation of the <a href="https://datatracker.ietf.org/doc/draft-irtf-cfrg-hpke/">HPKE RFC</a>.
+The text is mostly verbatim from the RFC with changes where required.
+It demonstrates the possibilities of hacspec for specifications.</p>
+</blockquote>
+<ul>
+<li><a href="fn.GenerateKeyPair.html" title="GenerateKeyPair"><code>GenerateKeyPair</code></a><code>()</code>: Randomized algorithm to generate a key pair <code>(skX, pkX)</code>.</li>
+<li><a href="fn.DeriveKeyPair.html" title="DeriveKeyPair"><code>DeriveKeyPair</code></a><code>(ikm)</code>: Deterministic algorithm to derive a key pair
+<code>(skX, pkX)</code> from the byte string <code>ikm</code>, where <code>ikm</code> SHOULD have at
+least <code>Nsk</code> bytes of entropy.</li>
+<li><a href="fn.SerializePublicKey.html" title="SerializePublicKey"><code>SerializePublicKey</code></a><code>(pkX)</code>: Produce a byte string of length <code>Npk</code> encoding the
+public key <code>pkX</code>.</li>
+<li><a href="fn.DeserializePublicKey.html" title="DeserializePublicKey"><code>DeserializePublicKey</code></a><code>(pkXm)</code>: Parse a byte string of length <code>Npk</code> to recover a
+public key. This function can raise a <code>DeserializeError</code> error upon <code>pkXm</code>
+deserialization failure.</li>
+<li><a href="fn.Encap.html" title="Encap"><code>Encap</code></a><code>(pkR)</code>: Randomized algorithm to generate an ephemeral,
+fixed-length symmetric key (the KEM shared secret) and
+a fixed-length encapsulation of that key that can be decapsulated
+by the holder of the private key corresponding to <code>pkR</code>. This function
+can raise an <code>EncapError</code> on encapsulation failure.</li>
+<li><a href="fn.Decap.html" title="Decap"><code>Decap</code></a><code>(enc, skR)</code>: Deterministic algorithm using the private key <code>skR</code>
+to recover the ephemeral symmetric key (the KEM shared secret) from
+its encapsulated representation <code>enc</code>. This function can raise a
+<code>DecapError</code> on decapsulation failure.</li>
+<li><a href="fn.AuthEncap.html" title="AuthEncap"><code>AuthEncap</code></a><code>(pkR, skS)</code> (optional): Same as <code>Encap()</code>, and the outputs
+encode an assurance that the KEM shared secret was generated by the
+holder of the private key <code>skS</code>.</li>
+<li><a href="fn.AuthDecap.html" title="AuthDecap"><code>AuthDecap</code></a><code>(enc, skR, pkS)</code> (optional): Same as <code>Decap()</code>, and the recipient
+is assured that the KEM shared secret was generated by the holder of
+the private key <code>skS</code>.</li>
+<li><a href="fn.Nsecret.html" title="Nsecret"><code>Nsecret</code></a>: The length in bytes of a KEM shared secret produced by this KEM.</li>
+<li><a href="fn.Nenc.html" title="Nenc"><code>Nenc</code></a>: The length in bytes of an encapsulated key produced by this KEM.</li>
+<li><a href="fn.Npk.html" title="Npk"><code>Npk</code></a>: The length in bytes of an encoded public key for this KEM.</li>
+<li><a href="fn.Nsk.html" title="Nsk"><code>Nsk</code></a>: The length in bytes of an encoded private key for this KEM.</li>
+</ul>
+<p>Beyond the above, a KEM MAY also expose the following functions, whose behavior
+is detailed below:</p>
+<ul>
+<li><code>SerializePrivateKey(skX)</code>: Produce a byte string of length <code>Nsk</code> encoding the private
+key <code>skX</code>.</li>
+<li><code>DeserializePrivateKey(skXm)</code>: Parse a byte string of length <code>Nsk</code> to recover a
+private key. This function can raise a <code>DeserializeError</code> error upon <code>skXm</code>
+deserialization failure.</li>
+</ul>
+<h4 id="serializepublickey-and-deserializepublickey" class="section-header"><a href="#serializepublickey-and-deserializepublickey">SerializePublicKey and DeserializePublicKey</a></h4>
+<p>For P-256, P-384 and P-521, the <a href="fn.SerializePublicKey.html" title="SerializePublicKey()"><code>SerializePublicKey()</code></a> function of the
+KEM performs the uncompressed Elliptic-Curve-Point-to-Octet-String
+conversion according to <a href="https://secg.org/sec1-v2.pdf">SECG</a>. <a href="fn.DeserializePublicKey.html" title="DeserializePublicKey()"><code>DeserializePublicKey()</code></a> performs the
+uncompressed Octet-String-to-Elliptic-Curve-Point conversion.</p>
+<p>For X25519 and X448, the <a href="fn.SerializePublicKey.html" title="SerializePublicKey()"><code>SerializePublicKey()</code></a> and <a href="fn.DeserializePublicKey.html" title="DeserializePublicKey()"><code>DeserializePublicKey()</code></a>
+functions are the identity function, since these curves already use
+fixed-length byte strings for public keys.</p>
+<p>Some deserialized public keys MUST be validated before they can be used. See
+<a href="#validation-of-inputs-and-outputs">Validation</a> for specifics.</p>
+<h3 id="serializeprivatekey-and-deserializeprivatekey" class="section-header"><a href="#serializeprivatekey-and-deserializeprivatekey">SerializePrivateKey and DeserializePrivateKey</a></h3>
+<p>As per <a href="https://secg.org/sec1-v2.pdf">SECG</a>, P-256, P-384, and P-521 private keys are field elements in the
+scalar field of the curve being used. For this section, and for
+<a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a>, it is assumed that implementers of ECDH over these curves
+use an integer representation of private keys that is compatible with the
+<code>OS2IP()</code> function.</p>
+<p>For P-256, P-384 and P-521, the <code>SerializePrivateKey()</code> function of the KEM
+performs the Field-Element-to-Octet-String conversion according to <a href="https://secg.org/sec1-v2.pdf">SECG</a>. If
+the private key is an integer outside the range <code>[0, order-1]</code>, where <code>order</code>
+is the order of the curve being used, the private key MUST be reduced to its
+representative in <code>[0, order-1]</code> before being serialized.
+<code>DeserializePrivateKey()</code> performs the Octet-String-to-Field-Element conversion
+according to <a href="https://secg.org/sec1-v2.pdf">SECG</a>.</p>
+<p>For X25519 and X448, private keys are identical to their byte string
+representation, so little processing has to be done. The
+<code>SerializePrivateKey()</code> function MUST clamp its output and
+<code>DeserializePrivateKey()</code> MUST clamp its input, where <em>clamping</em> refers to the
+bitwise operations performed on <code>k</code> in the <code>decodeScalar25519()</code> and
+<code>decodeScalar448()</code> functions defined in section 5 of <a href="https://www.rfc-editor.org/info/rfc7748">RFC7748</a>.</p>
+<p>To catch invalid keys early on, implementers of DHKEMs SHOULD check that
+deserialized private keys are not equivalent to 0 (mod <code>order</code>), where <code>order</code>
+is the order of the DH group. Note that this property is trivially true for X25519
+and X448 groups, since clamped values can never be 0 (mod <code>order</code>).</p>
+<h4 id="derivekeypair" class="section-header"><a href="#derivekeypair">DeriveKeyPair</a></h4>
+<p>See <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> for details.</p>
+<h3 id="dh-based-kem" class="section-header"><a href="#dh-based-kem">DH-Based KEM</a></h3>
+<p>Suppose we are given a KDF, and a Diffie-Hellman group providing the
+following operations:</p>
+<ul>
+<li><a href="fn.DH.html"><code>DH(skX, pkY)</code></a>: Perform a non-interactive Diffie-Hellman exchange using
+the private key <code>skX</code> and public key <code>pkY</code> to produce a Diffie-Hellman shared
+secret of length <code>Ndh</code>. This function can raise a <a href="../hpke_errors/enum.HpkeError.html#variant.ValidationError"><code>ValidationError</code></a> as described
+in <a href="#validation-of-inputs-and-outputs">validation</a>.</li>
+<li><a href="fn.Ndh.html" title="Ndh"><code>Ndh</code></a>: The length in bytes of a Diffie-Hellman shared secret produced
+by <a href="fn.DH.html" title="DH()"><code>DH()</code></a>.</li>
+<li><a href="fn.Nsk.html" title="Nsk"><code>Nsk</code></a>: The length in bytes of a Diffie-Hellman private key.</li>
+</ul>
+<p>Then we can construct a KEM that implements the KEM interface
+called <code>DHKEM(Group, KDF)</code> in the following way, where <code>Group</code> denotes the
+Diffie-Hellman group and <code>KDF</code> the KDF. The function parameters <code>pkR</code> and <code>pkS</code>
+are deserialized public keys, and <code>enc</code> is a serialized public key. Since
+encapsulated keys are Diffie-Hellman public keys in this KEM algorithm,
+we use <a href="fn.SerializePublicKey.html" title="SerializePublicKey()"><code>SerializePublicKey()</code></a> and <a href="fn.DeserializePublicKey.html" title="DeserializePublicKey()"><code>DeserializePublicKey()</code></a> to encode and decode
+them, respectively. <a href="fn.Npk.html" title="Npk"><code>Npk</code></a> equals <a href="fn.Nenc.html" title="Nenc"><code>Nenc</code></a>. <a href="fn.GenerateKeyPair.html" title="GenerateKeyPair()"><code>GenerateKeyPair()</code></a> produces a key pair
+for the Diffie-Hellman group in use.</p>
+<p>The <code>suite_id</code> value used within <a href="../hpke_kdf/fn.LabeledExtract.html" title="LabeledExtract"><code>LabeledExtract</code></a> and
+<a href="../hpke_kdf/fn.LabeledExpand.html" title="LabeledExpand"><code>LabeledExpand</code></a> is defined as follows, where <code>kem_id</code> is defined
+in <a href="enum.KEM.html" title="KEM"><code>KEM</code></a>:</p>
+<div class="example-wrap"><pre class="language-text"><code>suite_id = concat(&quot;KEM&quot;, I2OSP(kem_id, 2))</code></pre></div>
+<p>The KDF used in DHKEM can be equal to or different from the KDF used
+in the remainder of HPKE, depending on the chosen variant.
+Implementations MUST make sure to use the constants (<code>Nh</code>) and function
+calls (<a href="../hpke_kdf/fn.LabeledExtract.html" title="LabeledExtract"><code>LabeledExtract</code></a>, <a href="../hpke_kdf/fn.LabeledExpand.html" title="LabeledExpand"><code>LabeledExpand</code></a>) of the appropriate KDF when
+implementing DHKEM. See <a href="../hpke_kdf/index.html"><code>kdf</code></a> for a comment on the choice of
+a KDF for the remainder of HPKE, and the
+rationale of the labels.</p>
+<p>For the variants of DHKEM defined in this document, the size <a href="fn.Nsecret.html" title="Nsecret"><code>Nsecret</code></a> of the
+KEM shared secret is equal to the output length of the hash function
+underlying the KDF. For P-256, P-384 and P-521, the size <a href="fn.Ndh.html" title="Ndh"><code>Ndh</code></a> of the
+Diffie-Hellman shared secret is equal to 32, 48, and 66, respectively,
+corresponding to the x-coordinate of the resulting elliptic curve point <a href="https://en.wikipedia.org/wiki/IEEE_P1363">IEEE1363</a>.
+For X25519 and X448, the size <a href="fn.Ndh.html" title="Ndh"><code>Ndh</code></a> of is equal to 32 and 56, respectively
+(see <a href="https://www.rfc-editor.org/info/rfc7748">RFC7748</a>, Section 5).</p>
+<p>It is important to note that the <a href="fn.AuthEncap.html" title="AuthEncap()"><code>AuthEncap()</code></a> and <a href="fn.AuthDecap.html" title="AuthDecap()"><code>AuthDecap()</code></a> functions of the
+DHKEM variants defined in this document are vulnerable to key-compromise
+impersonation (KCI). This means the assurance that the KEM shared secret
+was generated by the holder of the private key <code>skS</code> does not hold if
+the recipient private key <code>skR</code> is compromised.</p>
+<p>Senders and recipients MUST validate KEM inputs and outputs as described
+in <a href="enum.KEM.html" title="KEM"><code>KEM</code></a>.</p>
+<h4 id="validation-of-inputs-and-outputs" class="section-header"><a href="#validation-of-inputs-and-outputs">Validation of Inputs and Outputs</a></h4>
+<p>The following public keys are subject to validation if the group
+requires public key validation: the sender MUST validate the recipient’s
+public key <code>pkR</code>; the recipient MUST validate the ephemeral public key
+<code>pkE</code>; in authenticated modes, the recipient MUST validate the sender’s
+static public key <code>pkS</code>. Validation failure yields a <code>ValidationError</code>.</p>
+<p>For P-256, P-384 and P-521, senders and recipients MUST perform partial
+public-key validation on all public key inputs, as defined in section 5.6.2.3.4
+of <a href="https://doi.org/10.6028/nist.sp.800-56ar3">NIST SP 800-56A</a>. This includes checking that the coordinates are in the
+correct range, that the point is on the curve, and that the point is not the
+point at infinity. Additionally, senders and recipients MUST ensure the
+Diffie-Hellman shared secret is not the point at infinity.</p>
+<p>For X25519 and X448, public keys and Diffie-Hellman outputs MUST be validated
+as described in <a href="https://www.rfc-editor.org/info/rfc7748">RFC7748</a>. In particular, recipients MUST check whether
+the Diffie-Hellman shared secret is the all-zero value and abort if so.</p>
+<h4 id="future-kems" class="section-header"><a href="#future-kems">Future KEMs</a></h4>
+<p><a href="#security-requirements-on-a-kem-used-within-hpke">KEM Security</a> lists security requirements on a KEM used within HPKE.</p>
+<p>The <a href="fn.AuthEncap.html" title="AuthEncap()"><code>AuthEncap()</code></a> and <a href="fn.AuthDecap.html" title="AuthDecap()"><code>AuthDecap()</code></a> functions are OPTIONAL. If a KEM algorithm
+does not provide them, only the Base and PSK modes of HPKE are supported.
+Future specifications which define new KEMs MUST indicate whether or not
+Auth and AuthPSK modes are supported.</p>
+<p>A KEM algorithm may support different encoding algorithms, with different output
+lengths, for KEM public keys. Such KEM algorithms MUST specify only one encoding
+algorithm whose output length is <a href="fn.Npk.html" title="Npk"><code>Npk</code></a>.</p>
+<h3 id="security-requirements-on-a-kem-used-within-hpke" class="section-header"><a href="#security-requirements-on-a-kem-used-within-hpke">Security Requirements on a KEM used within HPKE</a></h3>
+<p>A KEM used within HPKE MUST allow HPKE to satisfy its desired security
+properties described in its security properties section.</p>
+<p>In particular, the KEM
+shared secret MUST be a uniformly random byte string of length <a href="fn.Nsecret.html" title="Nsecret"><code>Nsecret</code></a>.
+This means, for instance, that it would not be sufficient if the KEM
+shared secret is only uniformly random as an element of some set prior
+to its encoding as byte string.</p>
+<h4 id="encapdecap-interface" class="section-header"><a href="#encapdecap-interface">Encap/Decap Interface</a></h4>
+<p>As mentioned in [sec-considerations], <a href="https://eprint.iacr.org/2001/108">CS01</a> provides some indications
+that if the KEM’s <a href="fn.Encap.html" title="Encap()"><code>Encap()</code></a>/<a href="fn.Decap.html" title="Decap()"><code>Decap()</code></a> interface (which is used in the Base
+and PSK modes), is IND-CCA2-secure, HPKE is able to satisfy its desired
+security properties. An appropriate definition of IND-CCA2-security for
+KEMs can be found in <a href="https://eprint.iacr.org/2001/108">CS01</a> and <a href="https://eprint.iacr.org/2009/418">BHK09</a>.</p>
+<h4 id="authencapauthdecap-interface" class="section-header"><a href="#authencapauthdecap-interface">AuthEncap/AuthDecap Interface</a></h4>
+<p>The analysis of HPKE’s Auth mode single-shot encryption API in <a href="https://eprint.iacr.org/2020/1499">ABHKLR20</a>
+provides composition theorems that guarantee that HPKE’s Auth mode achieves
+its desired security properties if the KEM’s <a href="fn.AuthEncap.html" title="AuthEncap()"><code>AuthEncap()</code></a>/<a href="fn.AuthDecap.html" title="AuthDecap()"><code>AuthDecap()</code></a>
+interface satisfies multi-user Outsider-CCA, Outsider-Auth, and
+Insider-CCA security as defined in the same paper.</p>
+<p>Intuitively, Outsider-CCA security formalizes confidentiality, and
+Outsider-Auth security formalizes authentication of the KEM shared secret
+in case none of the sender or recipient private keys are compromised.
+Insider-CCA security formalizes confidentiality of the KEM shared secret
+in case the sender private key is known or chosen by the adversary.
+(If the recipient private key is known or chosen by the adversary,
+confidentiality is trivially broken, because then the adversary knows
+all secrets on the recipient’s side).</p>
+<p>An Insider-Auth security notion would formalize authentication of the
+KEM shared secret in case the recipient private key is known or chosen
+by the adversary. (If the sender private key is known or chosen by the
+adversary, it can create KEM ciphertexts in the name of the sender).
+Because of the generic attack on an analogous Insider-Auth security
+notion of HPKE, a definition of
+Insider-Auth security for KEMs used within HPKE is not useful.</p>
+<h4 id="kem-key-reuse" class="section-header"><a href="#kem-key-reuse">KEM Key Reuse</a></h4>
+<p>An <code>ikm</code> input to <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> MUST NOT be
+reused elsewhere, in particular not with <a href="fn.DeriveKeyPair.html" title="DeriveKeyPair()"><code>DeriveKeyPair()</code></a> of a
+different KEM.</p>
+<p>The randomness used in <a href="fn.Encap.html" title="Encap()"><code>Encap()</code></a> and <a href="fn.AuthEncap.html" title="AuthEncap()"><code>AuthEncap()</code></a> to generate the
+KEM shared secret or its encapsulation MUST NOT be reused elsewhere.</p>
+<p>As a sender or recipient KEM key pair works with all modes, it can
+be used with multiple modes in parallel. HPKE is constructed to be
+secure in such settings due to domain separation using the <code>suite_id</code>
+variable. However, there is no formal proof of security at the time of
+writing for using multiple modes in parallel; <a href="https://eprint.iacr.org/2020/243">HPKEAnalysis</a> and
+<a href="https://eprint.iacr.org/2020/1499">ABHKLR20</a> only analyze isolated modes.</p>
+</div></details><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.KEM.html" title="hpke_kem::KEM enum">KEM</a></div><div class="item-right docblock-short"><p>Key Encapsulation Mechanisms (KEMs)</p>
+</div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.AuthDecap.html" title="hpke_kem::AuthDecap fn">AuthDecap</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.AuthEncap.html" title="hpke_kem::AuthEncap fn">AuthEncap</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.DH.html" title="hpke_kem::DH fn">DH</a></div><div class="item-right docblock-short"><p>Perform a non-interactive Diffie-Hellman exchange using the private key
+<code>skX</code> and public key <code>pkY</code> to produce a Diffie-Hellman shared
+secret of length <code>Ndh</code>. This function can raise a
+<a href="../hpke_errors/enum.HpkeError.html#variant.ValidationError"><code>ValidationError</code></a> as described in
+<a href="#validation-of-inputs-and-outputs">validation</a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Decap.html" title="hpke_kem::Decap fn">Decap</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.DeriveKeyPair.html" title="hpke_kem::DeriveKeyPair fn">DeriveKeyPair</a></div><div class="item-right docblock-short"><p>DeriveKeyPair</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.DeriveKeyPairX.html" title="hpke_kem::DeriveKeyPairX fn">DeriveKeyPairX</a></div><div class="item-right docblock-short"><p>For X25519 and X448, the <code>DeriveKeyPair()</code> function applies a KDF to the input:</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.DeserializePublicKey.html" title="hpke_kem::DeserializePublicKey fn">DeserializePublicKey</a></div><div class="item-right docblock-short"><p>Parse a byte string of length <code>Npk</code> to recover a
+public key. This function can raise a <code>DeserializeError</code> error upon <code>pkXm</code>
+deserialization failure.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Encap.html" title="hpke_kem::Encap fn">Encap</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.GenerateKeyPair.html" title="hpke_kem::GenerateKeyPair fn">GenerateKeyPair</a></div><div class="item-right docblock-short"><p>Randomized algorithm to generate a key pair <code>(skX, pkX)</code>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Ndh.html" title="hpke_kem::Ndh fn">Ndh</a></div><div class="item-right docblock-short"><p>The length in bytes of a Diffie-Hellman shared secret produced by <a href="fn.DH.html" title="DH()"><code>DH()</code></a>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Nenc.html" title="hpke_kem::Nenc fn">Nenc</a></div><div class="item-right docblock-short"><p>Get the length of the encoded encapsulated key.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Npk.html" title="hpke_kem::Npk fn">Npk</a></div><div class="item-right docblock-short"><p>Get the length of the encoded public key.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Nsecret.html" title="hpke_kem::Nsecret fn">Nsecret</a></div><div class="item-right docblock-short"><p>Get the length of the shared secret.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.Nsk.html" title="hpke_kem::Nsk fn">Nsk</a></div><div class="item-right docblock-short"><p>Get the length of the private key.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.SerializePublicKey.html" title="hpke_kem::SerializePublicKey fn">SerializePublicKey</a></div><div class="item-right docblock-short"><p>Produce a byte string of length <code>Npk</code> encoding the public key <code>pkX</code>.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.kem_value.html" title="hpke_kem::kem_value fn">kem_value</a></div><div class="item-right docblock-short"><p><a href="https://doc.rust-lang.org/nightly/std/primitive.u16.html" title="u16"><code>u16</code></a> value of the <code>kem_id</code>.</p>
+</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.EncapResult.html" title="hpke_kem::EncapResult type">EncapResult</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.KeyPair.html" title="hpke_kem::KeyPair type">KeyPair</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.PrivateKey.html" title="hpke_kem::PrivateKey type">PrivateKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.PublicKey.html" title="hpke_kem::PublicKey type">PublicKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Randomness.html" title="hpke_kem::Randomness type">Randomness</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.SerializedPublicKey.html" title="hpke_kem::SerializedPublicKey type">SerializedPublicKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.SharedSecret.html" title="hpke_kem::SharedSecret type">SharedSecret</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke_kem" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+    <script src="../main.js"></script>
+</body></html>

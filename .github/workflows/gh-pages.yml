@@ -16,7 +16,7 @@ jobs:
           submodules: true
       - name: Build docs
         run: |
-          cargo doc --all-features --no-deps
+          ./doc.sh
           touch target/doc/.nojekyll
           cat > target/doc/index.html <<EOF
           <!doctype html>

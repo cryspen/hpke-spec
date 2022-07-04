@@ -8,3 +8,5 @@ fstar/*.lax
 
 # CLion
 .idea
+
+.vscode

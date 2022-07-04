@@ -5,3 +5,8 @@ Cargo.lock
 fstar/.depend
 fstar/_tags
 fstar/*.lax
+
+# CLion
+.idea
+
+.vscode

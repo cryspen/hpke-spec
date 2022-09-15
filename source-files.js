@@ -1,4 +1,4 @@
-var N = null;var sourcesIndex = {};
+var sourcesIndex = {};
 sourcesIndex["hacspec_aes128_gcm"] = {"name":"","files":["aes128-gcm.rs"]};
 sourcesIndex["hacspec_chacha20poly1305"] = {"name":"","files":["chacha20poly1305.rs"]};
 sourcesIndex["hacspec_curve25519"] = {"name":"","files":["curve25519.rs"]};

@@ -1,4 +1,11 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="HPKE 🤝 hacspec"><meta name="keywords" content="rust, rustlang, rust-lang, hpke"><title>hpke - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../hpke/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate hpke</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all hpke's items</p></a><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="hpke" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">hpke</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/hpke/hpke.rs.html#1-990" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="hpke--hacspec" class="section-header"><a href="#hpke--hacspec">HPKE 🤝 hacspec</a></h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="HPKE 🤝 hacspec"><meta name="keywords" content="rust, rustlang, rust-lang, hpke"><title>hpke - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script defer src="../crates.js"></script><script defer src="../main.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../hpke/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../hpke/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Crate hpke</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.1.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul></div><section><div class="block"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../hpke/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1">
+                                <a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div>
+                        </div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">hpke</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/hpke/hpke.rs.html#1-990">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="hpke--hacspec"><a href="#hpke--hacspec">HPKE 🤝 hacspec</a></h2>
 <blockquote>
 <p>💡 This is a hacspec representation of the <a href="https://datatracker.ietf.org/doc/draft-irtf-cfrg-hpke/">HPKE RFC</a>.
 The text is mostly verbatim from the RFC with changes where required.
@@ -16,7 +23,7 @@ be supported by all KEMs. We provide instantiations of the scheme using widely
 used and efficient primitives, such as Elliptic Curve Diffie-Hellman key
 agreement, HKDF, and SHA2.</p>
 <p>The original document is a product of the Crypto Forum Research Group (CFRG) in the IRTF.</p>
-<h2 id="introduction" class="section-header"><a href="#introduction">Introduction</a></h2>
+<h2 id="introduction"><a href="#introduction">Introduction</a></h2>
 <p>Encryption schemes that combine asymmetric and symmetric algorithms have been
 specified and practiced since the early days of public-key cryptography, e.g.,
 <a href="https://datatracker.ietf.org/doc/rfc1421/">RFC1421</a>. Combining the two yields the key management advantages of asymmetric
@@ -43,7 +50,7 @@ chosen ciphertext attacks (IND-CCA2 secure) under classical assumptions about
 the underlying primitives <a href="https://eprint.iacr.org/2020/243">HPKEAnalysis</a>, <a href="https://eprint.iacr.org/2020/1499">ABHKLR20</a>. A summary of
 these analyses is in Section 9.1.</p>
 <p>This document represents the consensus of the Crypto Forum Research Group (CFRG).</p>
-<h2 id="notation" class="section-header"><a href="#notation">Notation</a></h2>
+<h2 id="notation"><a href="#notation">Notation</a></h2>
 <p>The following terms are used throughout this document to describe the
 operations, roles, and behaviors of HPKE:</p>
 <ul>
@@ -65,7 +72,7 @@ described in <a href="https://datatracker.ietf.org/doc/rfc8017/">RFC8017</a>, as
 It is an error to call this function with two arguments of unequal
 length.</li>
 </ul>
-<h2 id="cryptographic-dependencies" class="section-header"><a href="#cryptographic-dependencies">Cryptographic Dependencies</a></h2>
+<h2 id="cryptographic-dependencies"><a href="#cryptographic-dependencies">Cryptographic Dependencies</a></h2>
 <p>HPKE variants rely on the following primitives:</p>
 <ul>
 <li>A Key Encapsulation Mechanism (<a href="../hpke_kem/index.html">KEM</a>)</li>
@@ -85,7 +92,7 @@ implementation, is either the
 computation of the public key using the private key, or just syntax
 expressing the retrieval of the public key assuming it is stored along
 with the private key object.</p>
-<h2 id="hybrid-public-key-encryption" class="section-header"><a href="#hybrid-public-key-encryption">Hybrid Public Key Encryption</a></h2>
+<h2 id="hybrid-public-key-encryption"><a href="#hybrid-public-key-encryption">Hybrid Public Key Encryption</a></h2>
 <p>In this section, we define a few HPKE variants. All variants take a
 recipient public key and a sequence of plaintexts <code>pt</code>, and produce an
 encapsulated key <code>enc</code> and a sequence of ciphertexts <code>ct</code>. These outputs are
@@ -101,11 +108,11 @@ possession of a <a href="../hpke_kem/index.html">KEM</a> private key, and one wh
 a pre-shared key and a <a href="../hpke_kem/index.html">KEM</a> private key. All authenticated variants contribute
 additional keying material to the encryption operation. The following one-byte
 values will be used to distinguish between modes:</p>
-<div><table><thead><tr><th align="left">Mode</th><th align="left">Value</th></tr></thead><tbody>
-<tr><td align="left">mode_base</td><td align="left">0x00</td></tr>
-<tr><td align="left">mode_psk</td><td align="left">0x01</td></tr>
-<tr><td align="left">mode_auth</td><td align="left">0x02</td></tr>
-<tr><td align="left">mode_auth_psk</td><td align="left">0x03</td></tr>
+<div><table><thead><tr><th style="text-align: left">Mode</th><th style="text-align: left">Value</th></tr></thead><tbody>
+<tr><td style="text-align: left">mode_base</td><td style="text-align: left">0x00</td></tr>
+<tr><td style="text-align: left">mode_psk</td><td style="text-align: left">0x01</td></tr>
+<tr><td style="text-align: left">mode_auth</td><td style="text-align: left">0x02</td></tr>
+<tr><td style="text-align: left">mode_auth_psk</td><td style="text-align: left">0x03</td></tr>
 </tbody></table>
 </div>
 <p>All these cases follow the same basic two-step pattern:</p>
@@ -137,39 +144,39 @@ See <a href="../hpke_kem/index.html#future-kems">Future KEMs</a> for more detail
 Python-like pseudocode. The algorithms in use are left implicit.
 See the <a href="#hacspec-implementation-considerations">Implementation Considerations Section</a>
 for details on the differences to this hacspec implementation.</p>
-<h3 id="creating-the-encryption-context" class="section-header"><a href="#creating-the-encryption-context">Creating the Encryption Context</a></h3>
+<h3 id="creating-the-encryption-context"><a href="#creating-the-encryption-context">Creating the Encryption Context</a></h3>
 <p>The variants of HPKE defined in this document share a common
 key schedule that translates the protocol inputs into an encryption
 context.</p>
 <p>See <a href="fn.KeySchedule.html" title="KeySchedule()"><code>KeySchedule()</code></a> for details.</p>
-<h4 id="encryption-to-a-public-key" class="section-header"><a href="#encryption-to-a-public-key">Encryption to a Public Key</a></h4>
+<h4 id="encryption-to-a-public-key"><a href="#encryption-to-a-public-key">Encryption to a Public Key</a></h4>
 <p>The most basic function of an HPKE scheme is to enable encryption
 to the holder of a given KEM private key.</p>
 <p>See <a href="fn.SetupBaseS.html" title="SetupBaseS()"><code>SetupBaseS()</code></a> and <a href="fn.SetupBaseR.html" title="SetupBaseR()"><code>SetupBaseR()</code></a> for details.</p>
-<h4 id="authentication-using-a-pre-shared-key" class="section-header"><a href="#authentication-using-a-pre-shared-key">Authentication using a Pre-Shared Key</a></h4>
+<h4 id="authentication-using-a-pre-shared-key"><a href="#authentication-using-a-pre-shared-key">Authentication using a Pre-Shared Key</a></h4>
 <p>This variant extends the base mechanism by allowing the recipient to
 authenticate that the sender possessed a given PSK.</p>
 <p>See <a href="fn.SetupPSKS.html" title="SetupPSKS()"><code>SetupPSKS()</code></a> and <a href="fn.SetupPSKR.html" title="SetupPSKR()"><code>SetupPSKR()</code></a> for details.</p>
-<h4 id="authentication-using-an-asymmetric-key" class="section-header"><a href="#authentication-using-an-asymmetric-key">Authentication using an Asymmetric Key</a></h4>
+<h4 id="authentication-using-an-asymmetric-key"><a href="#authentication-using-an-asymmetric-key">Authentication using an Asymmetric Key</a></h4>
 <p>This variant extends the base mechanism by allowing the recipient
 to authenticate that the sender possessed a given KEM private key.</p>
 <p>See <a href="fn.SetupAuthS.html" title="SetupAuthS()"><code>SetupAuthS()</code></a> and <a href="fn.SetupAuthR.html" title="SetupAuthR()"><code>SetupAuthR()</code></a> for details.</p>
-<h4 id="authentication-using-both-a-psk-and-an-asymmetric-key" class="section-header"><a href="#authentication-using-both-a-psk-and-an-asymmetric-key">Authentication using both a PSK and an Asymmetric Key</a></h4>
+<h4 id="authentication-using-both-a-psk-and-an-asymmetric-key"><a href="#authentication-using-both-a-psk-and-an-asymmetric-key">Authentication using both a PSK and an Asymmetric Key</a></h4>
 <p>This mode is a straightforward combination of the PSK and
 authenticated modes.</p>
 <p>See <a href="fn.SetupAuthPSKS.html" title="SetupAuthPSKS()"><code>SetupAuthPSKS()</code></a> and <a href="fn.SetupAuthPSKR.html" title="SetupAuthPSKR()"><code>SetupAuthPSKR()</code></a> for details.</p>
-<h3 id="encryption-and-decryption" class="section-header"><a href="#encryption-and-decryption">Encryption and Decryption</a></h3>
+<h3 id="encryption-and-decryption"><a href="#encryption-and-decryption">Encryption and Decryption</a></h3>
 <p>HPKE allows multiple encryption operations to be done based on a
 given setup transaction.</p>
 <p>See <a href="fn.ContextS_Seal.html" title="ContextS_Seal"><code>ContextS_Seal</code></a> and <a href="fn.ContextR_Open.html" title="ContextR_Open"><code>ContextR_Open</code></a> for details.</p>
-<h3 id="secret-export" class="section-header"><a href="#secret-export">Secret Export</a></h3>
+<h3 id="secret-export"><a href="#secret-export">Secret Export</a></h3>
 <p>HPKE provides an interface for exporting secrets from the encryption context
 using a variable-length PRF, similar to the TLS 1.3 exporter interface.</p>
 <p>See <a href="fn.Context_Export.html" title="Context_Export"><code>Context_Export</code></a> for details.</p>
-<h2 id="single-shot-apis" class="section-header"><a href="#single-shot-apis">Single-Shot APIs</a></h2><h3 id="encryption-and-decryption---single-shot" class="section-header"><a href="#encryption-and-decryption---single-shot">Encryption and Decryption - Single-Shot</a></h3>
+<h2 id="single-shot-apis"><a href="#single-shot-apis">Single-Shot APIs</a></h2><h3 id="encryption-and-decryption---single-shot"><a href="#encryption-and-decryption---single-shot">Encryption and Decryption - Single-Shot</a></h3>
 <p>In many cases, applications encrypt only a single message to a recipient’s public key.</p>
 <p>See <a href="fn.HpkeSeal.html" title="HpkeSeal"><code>HpkeSeal</code></a> and <a href="fn.HpkeOpen.html" title="HpkeOpen"><code>HpkeOpen</code></a> for details.</p>
-<h3 id="secret-export---single-shot" class="section-header"><a href="#secret-export---single-shot">Secret Export - Single-Shot</a></h3>
+<h3 id="secret-export---single-shot"><a href="#secret-export---single-shot">Secret Export - Single-Shot</a></h3>
 <p>Applications may also want to derive a secret known only to a given recipient.
 This section provides templates for HPKE APIs that implement stateless
 “single-shot” secret export using APIs specified in <a href="#secret-export">Secret Export</a>:</p>
@@ -177,18 +184,18 @@ This section provides templates for HPKE APIs that implement stateless
 <p>As in <a href="#encryption-and-decryption---single-shot">Single Shot Encryption</a>, the <code>MODE</code> template parameter is one of Base, PSK,
 Auth, or AuthPSK. The optional parameters indicated by “…” depend on <code>MODE</code> and may
 be empty.</p>
-<h2 id="algorithm-identifiers" class="section-header"><a href="#algorithm-identifiers">Algorithm Identifiers</a></h2>
+<h2 id="algorithm-identifiers"><a href="#algorithm-identifiers">Algorithm Identifiers</a></h2>
 <p>This section lists algorithm identifiers suitable for different HPKE configurations.
 Future specifications may introduce new KEM, KDF, and AEAD algorithm identifiers
 and retain the security guarantees presented in this document provided they adhere
 to the security requirements in <a href="../hpke_kem/index.html#security-requirements-on-a-kem-used-within-hpke">KEM Security</a>, <a href="../hpke_kdf/index.html#security-requirements-on-a-kdf">KDF Security</a>, and
 <a href="../hpke_aead/index.html#security-requirements-on-an-aead">AEAD Security</a>, respectively.</p>
 <p>See <a href="../hpke_kdf/index.html">KDF</a>, <a href="../hpke_kem/index.html">KEM</a>, and <a href="../hpke_aead/index.html">AEAD</a> for details on the algorithms.</p>
-<h2 id="api-considerations" class="section-header"><a href="#api-considerations">API Considerations</a></h2>
+<h2 id="api-considerations"><a href="#api-considerations">API Considerations</a></h2>
 <p>This section documents considerations for interfaces to implementations of HPKE.
 This includes error handling considerations and recommendations that improve
 interoperability when HPKE is used in applications.</p>
-<h3 id="auxiliary-authenticated-application-information" class="section-header"><a href="#auxiliary-authenticated-application-information">Auxiliary Authenticated Application Information</a></h3>
+<h3 id="auxiliary-authenticated-application-information"><a href="#auxiliary-authenticated-application-information">Auxiliary Authenticated Application Information</a></h3>
 <p>HPKE has two places at which applications can specify auxiliary authenticated information:
 (1) during context construction via the Setup <code>info</code> parameter, and (2) during Context
 operations, i.e., with the <code>aad</code> parameter for <code>Open()</code> and <code>Seal()</code>, and the <code>exporter_context</code> parameter
@@ -200,10 +207,10 @@ should be specified via the Context APIs (<code>Seal()</code>, <code>Open()</cod
 Setup <code>info</code> parameter for specifying auxiliary authenticated information. Implementations which
 only expose single-shot APIs should not allow applications to use both Setup <code>info</code> and Context
 <code>aad</code> or <code>exporter_context</code> auxiliary information parameters.</p>
-<h3 id="errors" class="section-header"><a href="#errors">Errors</a></h3>
+<h3 id="errors"><a href="#errors">Errors</a></h3>
 <p>The high-level, public HPKE APIs specified in this document are all fallible.</p>
 <p>See <a href="../hpke_errors/index.html">Errors</a> for details.</p>
-<h2 id="message-encoding" class="section-header"><a href="#message-encoding">Message Encoding</a></h2>
+<h2 id="message-encoding"><a href="#message-encoding">Message Encoding</a></h2>
 <p>This document does not specify a wire format encoding for HPKE messages. Applications
 that adopt HPKE must therefore specify an unambiguous encoding mechanism which includes,
 minimally: the encapsulated value <code>enc</code>, ciphertext value(s) (and order if there are
@@ -220,7 +227,7 @@ these inputs into a single ciphertext value within <a href="fn.HpkeSeal.html"><c
 <a href="fn.HpkeOpen.html"><code>Open()</code></a>, where the parsing details are defined by the AEAD scheme. For example, with
 the AES-GCM schemes specified in this document, the GCM authentication tag is placed in
 the last Nt bytes of the ciphertext output.</p>
-<h3 id="security-properties" class="section-header"><a href="#security-properties">Security Properties</a></h3>
+<h3 id="security-properties"><a href="#security-properties">Security Properties</a></h3>
 <p>HPKE has several security goals, depending on the mode of operation,
 against active and adaptive attackers that can compromise partial
 secrets of senders and recipients. The desired security goals are
@@ -258,7 +265,7 @@ has other non-goals that are described in <a href="#application-embedding-and-no
 message reordering or loss, no downgrade or replay prevention, no hiding of the
 plaintext length, no protection against bad ephemeral randomness. <a href="#application-embedding-and-non-goals">The non-goals section</a>
 suggests application-level mitigations for some of them.</p>
-<h4 id="key-compromise-impersonation" class="section-header"><a href="#key-compromise-impersonation">Key-Compromise Impersonation</a></h4>
+<h4 id="key-compromise-impersonation"><a href="#key-compromise-impersonation">Key-Compromise Impersonation</a></h4>
 <p>The DHKEM variants defined in this document are
 vulnerable to key-compromise impersonation attacks <a href="https://doi.org/10.1007/bfb0024447">BJM97</a>,
 which means that sender authentication cannot be expected to hold in the
@@ -286,7 +293,7 @@ non-quantum-resistant KEM used with HPKE is broken by a
 quantum computer, the security properties are preserved through the use
 of a pre-shared key. As described in <a href="https://www.rfc-editor.org/info/rfc8696">RFC8696</a> Section 7 this
 assumes that the pre-shared key has not been compromised.</p>
-<h4 id="computational-analysis" class="section-header"><a href="#computational-analysis">Computational Analysis</a></h4>
+<h4 id="computational-analysis"><a href="#computational-analysis">Computational Analysis</a></h4>
 <p>It is shown in <a href="https://eprint.iacr.org/2001/108">CS01</a> that a hybrid public-key encryption scheme of
 essentially the same form as the Base mode described here is
 IND-CCA2-secure as long as the underlying KEM and AEAD schemes are
@@ -328,11 +335,11 @@ secrets using the secret export interface.</p>
 <p>The table below summarizes the main results from <a href="https://eprint.iacr.org/2020/243">HPKEAnalysis</a>. N/A
 means that a property does not apply for the given mode, whereas <code>y</code> means
 the given mode satisfies the property.</p>
-<div><table><thead><tr><th align="left">Variant</th><th align="center">Message Sec.</th><th align="center">Export Sec.</th><th align="center">Sender Auth.</th></tr></thead><tbody>
-<tr><td align="left">Base</td><td align="center">y</td><td align="center">y</td><td align="center">N/A</td></tr>
-<tr><td align="left">PSK</td><td align="center">y</td><td align="center">y</td><td align="center">y</td></tr>
-<tr><td align="left">Auth</td><td align="center">y</td><td align="center">y</td><td align="center">y</td></tr>
-<tr><td align="left">AuthPSK</td><td align="center">y</td><td align="center">y</td><td align="center">y</td></tr>
+<div><table><thead><tr><th style="text-align: left">Variant</th><th style="text-align: center">Message Sec.</th><th style="text-align: center">Export Sec.</th><th style="text-align: center">Sender Auth.</th></tr></thead><tbody>
+<tr><td style="text-align: left">Base</td><td style="text-align: center">y</td><td style="text-align: center">y</td><td style="text-align: center">N/A</td></tr>
+<tr><td style="text-align: left">PSK</td><td style="text-align: center">y</td><td style="text-align: center">y</td><td style="text-align: center">y</td></tr>
+<tr><td style="text-align: left">Auth</td><td style="text-align: center">y</td><td style="text-align: center">y</td><td style="text-align: center">y</td></tr>
+<tr><td style="text-align: left">AuthPSK</td><td style="text-align: center">y</td><td style="text-align: center">y</td><td style="text-align: center">y</td></tr>
 </tbody></table>
 </div>
 <p>If non-DH-based KEMs are to be used with HPKE, further analysis will be
@@ -363,7 +370,7 @@ IND-CPA and IND-CTXT security.</p>
 Auth mode satisfies the desired message confidentiality and sender
 authentication properties listed at the beginning of this section;
 it does not consider multiple messages, nor the secret export API.</p>
-<h4 id="post-quantum-security" class="section-header"><a href="#post-quantum-security">Post-Quantum Security</a></h4>
+<h4 id="post-quantum-security"><a href="#post-quantum-security">Post-Quantum Security</a></h4>
 <p>All of <a href="https://eprint.iacr.org/2001/108">CS01</a>, <a href="https://eprint.iacr.org/2020/243">HPKEAnalysis</a>, and <a href="https://eprint.iacr.org/2020/1499">ABHKLR20</a> are premised on
 classical security models and assumptions, and do not consider
 adversaries capable of quantum computation. A full proof of post-quantum
@@ -381,7 +388,7 @@ by using the PSK or AuthPSK mode, is not proven in <a href="https://eprint.iacr.
 this analysis requires the random oracle model; in a quantum
 setting, this model needs adaption to, for example, the quantum random
 oracle model.</p>
-<h3 id="pre-shared-key-recommendations" class="section-header"><a href="#pre-shared-key-recommendations">Pre-Shared Key Recommendations</a></h3>
+<h3 id="pre-shared-key-recommendations"><a href="#pre-shared-key-recommendations">Pre-Shared Key Recommendations</a></h3>
 <p>In the PSK and AuthPSK modes, the PSK MUST have at least 32 bytes of
 entropy and SHOULD be of length <a href="../hpke_kdf/fn.Nh.html"><code>Nh</code></a> bytes or longer. Using a PSK longer than
 32 bytes but shorter than <a href="../hpke_kdf/fn.Nh.html"><code>Nh</code></a> bytes is permitted.</p>
@@ -411,7 +418,7 @@ The number of partitioning oracle queries remains unchanged.) As a result, the P
 must therefore be chosen with sufficient entropy so that m + log k is prohibitive for
 attackers (e.g., 2^128). Future specifications can define new AEAD algorithms which
 are key-committing.</p>
-<h3 id="domain-separation" class="section-header"><a href="#domain-separation">Domain Separation</a></h3>
+<h3 id="domain-separation"><a href="#domain-separation">Domain Separation</a></h3>
 <p>HPKE allows combining a DHKEM variant <code>DHKEM(Group, KDF')</code> and a KDF
 such that both KDFs are instantiated by the same KDF. By design, the
 calls to <code>Extract()</code> and <code>Expand()</code> inside DHKEM and the remainder of
@@ -439,12 +446,12 @@ inputs to the internal invocations of these functions inside <code>Extract()</co
 ensures that any secrets derived in HPKE are bound to the scheme’s name
 and version, even when possibly derived from the same Diffie-Hellman or
 KEM shared secret as in another scheme or version.</p>
-<h3 id="application-embedding-and-non-goals" class="section-header"><a href="#application-embedding-and-non-goals">Application Embedding and Non-Goals</a></h3>
+<h3 id="application-embedding-and-non-goals"><a href="#application-embedding-and-non-goals">Application Embedding and Non-Goals</a></h3>
 <p>HPKE is designed to be a fairly low-level mechanism. As a result, it assumes
 that certain properties are provided by the application in which HPKE is
 embedded, and leaves certain security properties to be provided by other
 mechanisms. Otherwise said, certain properties are out-of-scope for HPKE.</p>
-<h4 id="message-order-and-message-loss" class="section-header"><a href="#message-order-and-message-loss">Message Order and Message Loss</a></h4>
+<h4 id="message-order-and-message-loss"><a href="#message-order-and-message-loss">Message Order and Message Loss</a></h4>
 <p>The primary requirement that HPKE imposes on applications is the requirement
 that ciphertexts MUST be presented to <code>ContextR.Open()</code> in the same order in
 which they were generated by <code>ContextS.Seal()</code>. When the single-shot API is
@@ -460,16 +467,16 @@ this scheme are up to the application.</p>
 <p>HPKE is not tolerant of lost messages. Applications MUST be able to detect when
 a message has been lost. When an unrecoverable loss is detected, the application MUST discard
 any associated HPKE context.</p>
-<h4 id="downgrade-prevention" class="section-header"><a href="#downgrade-prevention">Downgrade Prevention</a></h4>
+<h4 id="downgrade-prevention"><a href="#downgrade-prevention">Downgrade Prevention</a></h4>
 <p>HPKE assumes that the sender and recipient agree on what algorithms to use.
 Depending on how these algorithms are negotiated, it may be possible for an
 intermediary to force the two parties to use suboptimal algorithms.</p>
-<h4 id="replay-protection" class="section-header"><a href="#replay-protection">Replay Protection</a></h4>
+<h4 id="replay-protection"><a href="#replay-protection">Replay Protection</a></h4>
 <p>The requirement that ciphertexts be presented to the <code>ContextR.Open()</code> function
 in the same order they were generated by <code>ContextS.Seal()</code> provides a degree of
 replay protection within a stream of ciphertexts resulting from a given context.
 HPKE provides no other replay protection.</p>
-<h4 id="forward-secrecy" class="section-header"><a href="#forward-secrecy">Forward Secrecy</a></h4>
+<h4 id="forward-secrecy"><a href="#forward-secrecy">Forward Secrecy</a></h4>
 <p>HPKE ciphertexts are not forward secret with respect to recipient compromise
 in any mode. This means that compromise of long-term recipient secrets allows
 an attacker to decrypt past ciphertexts encrypted under said secrets. This is because
@@ -478,7 +485,7 @@ only long-term secrets are used on the side of the recipient.</p>
 modes. This is because ephemeral randomness is used on the sender’s side, which
 is supposed to be erased directly after computation of the KEM shared secret and
 ciphertext.</p>
-<h4 id="bad-ephemeral-randomness" class="section-header"><a href="#bad-ephemeral-randomness">Bad Ephemeral Randomness</a></h4>
+<h4 id="bad-ephemeral-randomness"><a href="#bad-ephemeral-randomness">Bad Ephemeral Randomness</a></h4>
 <p>If the randomness used for KEM encapsulation is bad – i.e. of low entropy or
 compromised because of a broken or subverted random number generator – the
 confidentiality guarantees of HPKE degrade significantly. In Base mode,
@@ -493,12 +500,12 @@ enough to derive <code>shared_secret</code> in these modes.</p>
 <p>One way for applications to mitigate the impacts of bad ephemeral randomness is
 to combine ephemeral randomness with a local long-term secret that has been
 generated securely, as described in <a href="https://www.rfc-editor.org/info/rfc8937">RFC8937</a>.</p>
-<h4 id="hiding-plaintext-length" class="section-header"><a href="#hiding-plaintext-length">Hiding Plaintext Length</a></h4>
+<h4 id="hiding-plaintext-length"><a href="#hiding-plaintext-length">Hiding Plaintext Length</a></h4>
 <p>AEAD ciphertexts produced by HPKE do not hide the plaintext length. Applications
 requiring this level of privacy should use a suitable padding mechanism. See
 <a href="https://datatracker.ietf.org/doc/draft-ietf-tls-esni/">tls-esni</a> and <a href="https://www.rfc-editor.org/info/rfc8467">RFC8467</a> for examples of protocol-specific
 padding policies.</p>
-<h3 id="bidirectional-encryption" class="section-header"><a href="#bidirectional-encryption">Bidirectional Encryption</a></h3>
+<h3 id="bidirectional-encryption"><a href="#bidirectional-encryption">Bidirectional Encryption</a></h3>
 <p>HPKE encryption is unidirectional from sender
 to recipient. Applications that require bidirectional encryption can derive
 necessary keying material with the Secret Export interface.
@@ -517,7 +524,7 @@ there is no authentication of the remote party at all. Even in the Auth mode,
 where the remote party has proven that they hold a specific private key, this
 authentication is still subject to Key-Compromise Impersonation, as discussed
 in <a href="#key-compromise-impersonation">kci</a>.</p>
-<h3 id="metadata-protection" class="section-header"><a href="#metadata-protection">Metadata Protection</a></h3>
+<h3 id="metadata-protection"><a href="#metadata-protection">Metadata Protection</a></h3>
 <p>The authenticated modes of HPKE (PSK, Auth, AuthPSK) require that the recipient
 know what key material to use for the sender. This can be signaled in
 applications by sending the PSK ID (<code>psk_id</code> above) and/or the sender’s public
@@ -533,45 +540,45 @@ the recipient. A potential lower-cost approach (involving only symmetric
 operations) would be available if the nonce-protection schemes in <a href="http://dx.doi.org/10.1007/978-3-030-26948-7_9">BNT19</a>
 could be extended to cover other metadata. However, this construction would
 require further analysis.</p>
-<h2 id="hacspec-implementation-considerations" class="section-header"><a href="#hacspec-implementation-considerations">hacspec implementation considerations</a></h2>
+<h2 id="hacspec-implementation-considerations"><a href="#hacspec-implementation-considerations">hacspec implementation considerations</a></h2>
 <p>When defining HPKE in hacspec there are a number of considerations that have an
 impact on the way the code looks.</p>
 <p>The hacspec code is as close to the RFC pseudocode as possible.
 But some changes are necessary.</p>
-<h4 id="randomness" class="section-header"><a href="#randomness">Randomness</a></h4>
+<h4 id="randomness"><a href="#randomness">Randomness</a></h4>
 <p>hacspec does not allow to draw randomness.
 It is therefore necessary to pass in randomness every time it is needed.</p>
 <p>This approach is pretty close to the way this would be implemented in native Rust
 where a random-number generator is passed in and used to generate randomness.</p>
-<h4 id="configuration-parameters" class="section-header"><a href="#configuration-parameters">Configuration Parameters</a></h4>
+<h4 id="configuration-parameters"><a href="#configuration-parameters">Configuration Parameters</a></h4>
 <p>The HPKE RFC makes most of the configuration implicit to the functions rather than
 passing the algorithm identifiers around.
 Because the hacspec implementation has to know which algorithm to pick, this is
 of course not possible here.</p>
 <p>HPKE hacspec functions take either an <a href="struct.HPKEConfig.html" title="HPKEConfig"><code>HPKEConfig</code></a> object with all algorithms
 in it or the specific algorithm identifier needed for the operation.</p>
-<h4 id="naming" class="section-header"><a href="#naming">Naming</a></h4>
+<h4 id="naming"><a href="#naming">Naming</a></h4>
 <p>The HPKE RFC uses, in some cases, names that are impossible to use in hacspec
 because they are keywords or contain illegal characters.
 Further does hacspec not support member functions.</p>
 <p>We therefore replace <code>.</code> in function calls such as <code>Context.Export</code> with an underscore,
 i.e. write <code>Context_Export</code>.
 Keywords such as <code>open</code> are replaced with a semantically equivalent, i.e. <code>HpkeOpen</code>.</p>
-<h4 id="secret-bytes" class="section-header"><a href="#secret-bytes">Secret bytes</a></h4>
+<h4 id="secret-bytes"><a href="#secret-bytes">Secret bytes</a></h4>
 <p>hacspec has the notion of secret integers that can’t be used for certain operations
 and should enforce secret-independent computation time.</p>
 <p>For simplicity the hacspec HPKE implementation uses secret bytes everywhere even
 if not necessary, e.g. for cipher texts.</p>
-<h4 id="errors-1" class="section-header"><a href="#errors-1">Errors</a></h4>
+<h4 id="errors-1"><a href="#errors-1">Errors</a></h4>
 <p>While the RFC defines a set of errors it does not always define which errors
 are raised.
 For example, it leaves open whether implementations convert errors from the
 Diffie-Hellman operations into KEM errors (<code>EncapError</code>/<code>DecapError</code>) or not.</p>
 <p>With the specific implementation in hacspec here the errors are clearly defined.</p>
-</div></details><h2 id="structs" class="section-header"><a href="#structs">Structs</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKECiphertext.html" title="hpke::HPKECiphertext struct">HPKECiphertext</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKEConfig.html" title="hpke::HPKEConfig struct">HPKEConfig</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKEKeyPair.html" title="hpke::HPKEKeyPair struct">HPKEKeyPair</a></div><div class="item-right docblock-short"></div></div></div><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKECiphertext.html" title="hpke::HPKECiphertext struct">HPKECiphertext</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKEConfig.html" title="hpke::HPKEConfig struct">HPKEConfig</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.HPKEKeyPair.html" title="hpke::HPKEKeyPair struct">HPKEKeyPair</a></div><div class="item-right docblock-short"></div></div></div><h2 id="enums" class="small-section-header"><a href="#enums">Enums</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="enum" href="enum.Mode.html" title="hpke::Mode enum">Mode</a></div><div class="item-right docblock-short"><p>A one-byte value indicating the HPKE mode, defined in the following table.</p>
-</div></div></div><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+</div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2>
 <div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.ComputeNonce.html" title="hpke::ComputeNonce fn">ComputeNonce</a></div><div class="item-right docblock-short"><p>Compute Nonce</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.ContextR_Open.html" title="hpke::ContextR_Open fn">ContextR_Open</a></div><div class="item-right docblock-short"><p>Stateful open.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.ContextS_Seal.html" title="hpke::ContextS_Seal fn">ContextS_Seal</a></div><div class="item-right docblock-short"><p>Encryption and Decryption</p>
@@ -591,7 +598,6 @@ Diffie-Hellman operations into KEM errors (<code>EncapError</code>/<code>DecapEr
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.SetupPSKR.html" title="hpke::SetupPSKR fn">SetupPSKR</a></div><div class="item-right docblock-short"><p>Authentication using a Pre-Shared Key - Receiver</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.SetupPSKS.html" title="hpke::SetupPSKS fn">SetupPSKS</a></div><div class="item-right docblock-short"><p>Authentication using a Pre-Shared Key - Sender</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.VerifyPSKInputs.html" title="hpke::VerifyPSKInputs fn">VerifyPSKInputs</a></div><div class="item-right docblock-short"><p>Creating the Encryption Context</p>
-</div></div></div><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
-<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.AdditionalData.html" title="hpke::AdditionalData type">AdditionalData</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Ciphertext.html" title="hpke::Ciphertext type">Ciphertext</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ContextResult.html" title="hpke::ContextResult type">ContextResult</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.EmptyResult.html" title="hpke::EmptyResult type">EmptyResult</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.HpkePrivateKey.html" title="hpke::HpkePrivateKey type">HpkePrivateKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.HpkePublicKey.html" title="hpke::HpkePublicKey type">HpkePublicKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.KemOutput.html" title="hpke::KemOutput type">KemOutput</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Psk.html" title="hpke::Psk type">Psk</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.PskId.html" title="hpke::PskId type">PskId</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.SenderContextResult.html" title="hpke::SenderContextResult type">SenderContextResult</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
-    <script src="../main.js"></script>
+</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.AdditionalData.html" title="hpke::AdditionalData type">AdditionalData</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Ciphertext.html" title="hpke::Ciphertext type">Ciphertext</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.ContextResult.html" title="hpke::ContextResult type">ContextResult</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.EmptyResult.html" title="hpke::EmptyResult type">EmptyResult</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.HpkePrivateKey.html" title="hpke::HpkePrivateKey type">HpkePrivateKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.HpkePublicKey.html" title="hpke::HpkePublicKey type">HpkePublicKey</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.KemOutput.html" title="hpke::KemOutput type">KemOutput</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Psk.html" title="hpke::Psk type">Psk</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.PskId.html" title="hpke::PskId type">PskId</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="type" href="type.SenderContextResult.html" title="hpke::SenderContextResult type">SenderContextResult</a></div><div class="item-right docblock-short"></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="hpke" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.64.0-nightly (495b21669 2022-07-03)" ></div>
 </body></html>

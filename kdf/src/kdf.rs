@@ -105,7 +105,7 @@ pub fn LabeledExtract(
     ikm: &InputKeyMaterial,
 ) -> HpkeByteSeqResult {
     match hkdf_extract(
-        hash_for_kdf(alg),
+        &hash_for_kdf(alg),
         &hpke_version_label()
             .concat(suite_id)
             .concat(label)
@@ -140,7 +140,7 @@ pub fn LabeledExpand(
         HpkeByteSeqResult::Err(HpkeError::InvalidParameters)
     } else {
         match hkdf_expand(
-            hash_for_kdf(alg),
+            &hash_for_kdf(alg),
             prk,
             &U16_to_be_bytes(U16(L as u16))
                 .concat(&hpke_version_label())

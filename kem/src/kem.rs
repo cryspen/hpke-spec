@@ -2,12 +2,9 @@
 #![doc = include_str!("../Security.md")]
 #![allow(non_camel_case_types, non_snake_case)]
 
-#[cfg(feature = "evercrypt")]
-use evercrypt_cryptolib::*;
-#[cfg(not(feature = "evercrypt"))]
-use hacspec_cryptolib::*;
 use hacspec_lib::*;
 use hpke_kdf::*;
+use libcrux::kem::{Algorithm, Error as CryptoError};
 
 use hpke_errors::*;
 
@@ -89,14 +86,14 @@ fn kdf_for_kem(kem_id: KEM) -> KDF {
     }
 }
 
-/// Convert the KEM type to the named group of the cryptolib.
-fn kem_to_named_group(alg: KEM) -> NamedGroup {
+/// Convert the KEM type to the KEM algorithm of libcrux.
+fn kem_to_named_group(alg: KEM) -> Algorithm {
     match alg {
-        KEM::DHKEM_P256_HKDF_SHA256 => NamedGroup::Secp256r1,
-        KEM::DHKEM_P384_HKDF_SHA384 => NamedGroup::Secp384r1,
-        KEM::DHKEM_P521_HKDF_SHA512 => NamedGroup::Secp521r1,
-        KEM::DHKEM_X25519_HKDF_SHA256 => NamedGroup::X25519,
-        KEM::DHKEM_X448_HKDF_SHA512 => NamedGroup::X448,
+        KEM::DHKEM_P256_HKDF_SHA256 => Algorithm::Secp256r1,
+        KEM::DHKEM_P384_HKDF_SHA384 => Algorithm::Secp384r1,
+        KEM::DHKEM_P521_HKDF_SHA512 => Algorithm::Secp521r1,
+        KEM::DHKEM_X25519_HKDF_SHA256 => Algorithm::X25519,
+        KEM::DHKEM_X448_HKDF_SHA512 => Algorithm::X448,
     }
 }
 
@@ -243,16 +240,16 @@ fn shared_secret_from_dh(alg: KEM, secret: ByteSeq) -> ByteSeq {
 /// [`ValidationError`](`HpkeError::ValidationError`) as described in
 /// [validation](#validation-of-inputs-and-outputs).
 pub fn DH(alg: KEM, sk: &PrivateKey, pk: &PublicKey) -> Result<SharedSecret, HpkeError> {
-    match ecdh(&kem_to_named_group(alg), sk, pk) {
-        CryptoResult::Ok(secret) => HpkeByteSeqResult::Ok(shared_secret_from_dh(alg, secret)),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::ValidationError),
+    match libcrux::specs::ecdh::derive(kem_to_named_group(alg).into(), pk, sk) {
+        Ok(secret) => HpkeByteSeqResult::Ok(shared_secret_from_dh(alg, secret)),
+        Err(_) => HpkeByteSeqResult::Err(HpkeError::ValidationError),
     }
 }
 
 fn pk(alg: KEM, sk: &PrivateKey) -> Result<PublicKey, HpkeError> {
-    match secret_to_public(&kem_to_named_group(alg), sk) {
-        CryptoResult::Ok(pk) => HpkeByteSeqResult::Ok(pk),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::ValidationError),
+    match libcrux::specs::kem::secret_to_public(kem_to_named_group(alg), sk) {
+        Ok(pk) => HpkeByteSeqResult::Ok(pk),
+        Err(_) => HpkeByteSeqResult::Err(HpkeError::ValidationError),
     }
 }
 
@@ -287,25 +284,22 @@ pub fn SerializePublicKey(alg: KEM, pk: &PublicKey) -> PublicKey {
     }
 }
 
-/// Remove the leading 0x04 from the public key and ensure that it's valid.
-fn nist_curve_from_uncompressed(alg: KEM, pk: &PublicKey) -> HpkeByteSeqResult {
-    match parse_public_key(&kem_to_named_group(alg), pk) {
-        CryptoResult::Ok(pk) => HpkeByteSeqResult::Ok(pk),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::DeserializeError),
-    }
+/// Remove the leading 0x04 from the public key.
+fn nist_curve_from_uncompressed(pk: &PublicKey) -> ByteSeq {
+    pk.slice(1, pk.len() - 1)
 }
 
 /// Parse a byte string of length `Npk` to recover a
 /// public key. This function can raise a `DeserializeError` error upon `pkXm`
 /// deserialization failure.
 pub fn DeserializePublicKey(alg: KEM, enc: &ByteSeq) -> HpkeByteSeqResult {
-    match alg {
-        KEM::DHKEM_P256_HKDF_SHA256 => nist_curve_from_uncompressed(alg, enc),
-        KEM::DHKEM_P384_HKDF_SHA384 => nist_curve_from_uncompressed(alg, enc),
-        KEM::DHKEM_P521_HKDF_SHA512 => nist_curve_from_uncompressed(alg, enc),
-        KEM::DHKEM_X25519_HKDF_SHA256 => HpkeByteSeqResult::Ok(enc.clone()),
-        KEM::DHKEM_X448_HKDF_SHA512 => HpkeByteSeqResult::Ok(enc.clone()),
-    }
+    HpkeByteSeqResult::Ok(match alg {
+        KEM::DHKEM_P256_HKDF_SHA256 => nist_curve_from_uncompressed(enc),
+        KEM::DHKEM_P384_HKDF_SHA384 => nist_curve_from_uncompressed(enc),
+        KEM::DHKEM_P521_HKDF_SHA512 => nist_curve_from_uncompressed(enc),
+        KEM::DHKEM_X25519_HKDF_SHA256 => enc.clone(),
+        KEM::DHKEM_X448_HKDF_SHA512 => enc.clone(),
+    })
 }
 
 /// ```text
@@ -354,7 +348,7 @@ pub fn DeriveKeyPairX(alg: KEM, ikm: &InputKeyMaterial) -> Result<KeyPair, HpkeE
 
     let sk = LabeledExpand(kdf, &suite_id, &dkp_prk, &sk_label(), &empty(), Nsk(alg))?;
 
-    match secret_to_public(&kem_to_named_group(alg), &sk) {
+    match libcrux::specs::kem::secret_to_public(kem_to_named_group(alg), &sk) {
         CryptoResult::Ok(pk) => Result::<KeyPair, HpkeError>::Ok((sk, PublicKey::from_seq(&pk))),
         CryptoResult::Err(_) => Result::<KeyPair, HpkeError>::Err(HpkeError::CryptoError),
     }
@@ -447,7 +441,7 @@ pub fn DeriveKeyPair(alg: KEM, ikm: &InputKeyMaterial) -> Result<KeyPair, HpkeEr
                 )?;
                 bytes[0] = bytes[0] & bitmask;
                 // This check ensure sk != 0 or sk < order
-                if valid_private_key(&named_group, &bytes) {
+                if libcrux::specs::ecdh::validate_scalar(named_group.into(), &bytes).is_ok() {
                     sk = bytes;
                 }
             }
@@ -456,7 +450,7 @@ pub fn DeriveKeyPair(alg: KEM, ikm: &InputKeyMaterial) -> Result<KeyPair, HpkeEr
     if sk.len() == 0 {
         Result::<KeyPair, HpkeError>::Err(HpkeError::DeriveKeyPairError)
     } else {
-        match secret_to_public(&named_group, &sk) {
+        match libcrux::specs::kem::secret_to_public(named_group, &sk) {
             CryptoResult::Ok(pk) => {
                 Result::<KeyPair, HpkeError>::Ok((sk, PublicKey::from_seq(&pk)))
             }

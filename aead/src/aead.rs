@@ -30,17 +30,12 @@
     non_upper_case_globals
 )]
 
-#[cfg(feature = "evercrypt")]
-use evercrypt_cryptolib::*;
-#[cfg(not(feature = "evercrypt"))]
-use hacspec_cryptolib::*;
-
 use hacspec_lib::*;
+use libcrux::{hmac::tag_size, specs::aead::*};
 
 use hpke_errors::*;
 
-type CryptoResult = Result<ByteSeq, CryptoError>;
-type AeadAlgResult = Result<AeadAlgorithm, HpkeError>;
+type AeadAlgResult = Result<Algorithm, HpkeError>;
 
 /// ## Authenticated Encryption with Associated Data (AEAD) Functions
 ///
@@ -127,9 +122,9 @@ pub type Nonce = ByteSeq;
 
 fn alg_for_aead(aead_id: AEAD) -> AeadAlgResult {
     match aead_id {
-        AEAD::AES_128_GCM => AeadAlgResult::Ok(AeadAlgorithm::Aes128Gcm),
-        AEAD::AES_256_GCM => AeadAlgResult::Ok(AeadAlgorithm::Aes256Gcm),
-        AEAD::ChaCha20Poly1305 => AeadAlgResult::Ok(AeadAlgorithm::Chacha20Poly1305),
+        AEAD::AES_128_GCM => AeadAlgResult::Ok(Algorithm::Aes128Gcm),
+        AEAD::AES_256_GCM => AeadAlgResult::Ok(Algorithm::Aes256Gcm),
+        AEAD::ChaCha20Poly1305 => AeadAlgResult::Ok(Algorithm::Chacha20Poly1305),
         AEAD::Export_only => AeadAlgResult::Err(HpkeError::UnsupportedAlgorithm),
     }
 }
@@ -145,9 +140,9 @@ pub fn AeadSeal(
     pt: &Seq<U8>,
 ) -> HpkeByteSeqResult {
     let algorithm = alg_for_aead(aead_id)?;
-    match aead_encrypt(&algorithm, key, nonce, pt, aad) {
-        CryptoResult::Ok(ct) => HpkeByteSeqResult::Ok(ct),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
+    match encrypt(algorithm, key, pt, nonce.clone(), aad) {
+        Ok((ct, tag)) => HpkeByteSeqResult::Ok(ct.concat_owned(tag)),
+        Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
     }
 }
 
@@ -163,8 +158,9 @@ pub fn AeadOpen(
     ct: &ByteSeq,
 ) -> HpkeByteSeqResult {
     let algorithm = alg_for_aead(aead_id)?;
-    match aead_decrypt(&algorithm, key, nonce, ct, aad) {
-        CryptoResult::Ok(pt) => HpkeByteSeqResult::Ok(pt),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
+    let (ct, tag) = ct.clone().split_off(ct.len() - Nt(aead_id));
+    match decrypt(algorithm, key, &ct, nonce.clone(), aad, &tag) {
+        Ok(pt) => HpkeByteSeqResult::Ok(pt),
+        Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
     }
 }

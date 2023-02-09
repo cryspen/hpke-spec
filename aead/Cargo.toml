@@ -8,10 +8,6 @@ path = "src/aead.rs"
 
 [dependencies]
 hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }
-hacspec_cryptolib = { git = "https://github.com/cryspen/utils", package = "hacspec_cryptolib" }
-evercrypt_cryptolib = { git = "https://github.com/cryspen/utils", package = "evercrypt_cryptolib", optional = true }
+libcrux = { path = "../../rwc-2023-talk/libcrux", features = ["hacspec"] }
 
 hpke_errors = { path = "../errors" }
-
-[features]
-evercrypt = ["evercrypt_cryptolib"]

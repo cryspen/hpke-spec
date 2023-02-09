@@ -1,13 +1,10 @@
 #![doc = include_str!("../Readme.md")]
 #![allow(non_snake_case, non_camel_case_types)]
 
-#[cfg(feature = "evercrypt")]
-use evercrypt_cryptolib::*;
-#[cfg(not(feature = "evercrypt"))]
-use hacspec_cryptolib::*;
 use hacspec_lib::*;
 
 use hpke_errors::*;
+use libcrux::hkdf::{Algorithm, Error as CryptoError};
 
 type CryptoResult = Result<ByteSeq, CryptoError>;
 
@@ -82,11 +79,11 @@ fn hpke_version_label() -> ByteSeq {
     byte_seq!(0x48u8, 0x50u8, 0x4bu8, 0x45u8, 0x2du8, 0x76u8, 0x31u8)
 }
 
-fn hash_for_kdf(alg: KDF) -> HashAlgorithm {
+fn hkdf_algorithm(alg: KDF) -> Algorithm {
     match alg {
-        KDF::HKDF_SHA256 => HashAlgorithm::SHA256,
-        KDF::HKDF_SHA384 => HashAlgorithm::SHA384,
-        KDF::HKDF_SHA512 => HashAlgorithm::SHA512,
+        KDF::HKDF_SHA256 => Algorithm::Sha256,
+        KDF::HKDF_SHA384 => Algorithm::Sha384,
+        KDF::HKDF_SHA512 => Algorithm::Sha512,
     }
 }
 
@@ -104,17 +101,14 @@ pub fn LabeledExtract(
     label: &ByteSeq,
     ikm: &InputKeyMaterial,
 ) -> HpkeByteSeqResult {
-    match hkdf_extract(
-        &hash_for_kdf(alg),
+    Ok(libcrux::specs::hkdf::extract(
+        hkdf_algorithm(alg),
+        salt,
         &hpke_version_label()
             .concat(suite_id)
             .concat(label)
             .concat(ikm),
-        salt,
-    ) {
-        CryptoResult::Ok(prk) => HpkeByteSeqResult::Ok(prk),
-        CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
-    }
+    ))
 }
 
 /// KDF: Labeled Expand
@@ -139,8 +133,8 @@ pub fn LabeledExpand(
         // The check comes from HKDF and will be performed there again.
         HpkeByteSeqResult::Err(HpkeError::InvalidParameters)
     } else {
-        match hkdf_expand(
-            &hash_for_kdf(alg),
+        match libcrux::specs::hkdf::expand(
+            hkdf_algorithm(alg),
             prk,
             &U16_to_be_bytes(U16(L as u16))
                 .concat(&hpke_version_label())

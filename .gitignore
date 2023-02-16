@@ -1,12 +1,11 @@
 /target
 Cargo.lock
 .DS_Store
+.cargo/config.toml
 
 fstar/.depend
 fstar/_tags
 fstar/*.lax
 
-# CLion
 .idea
-
 .vscode

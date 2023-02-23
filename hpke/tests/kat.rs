@@ -100,20 +100,20 @@ fn aead(val: u16) -> AEAD {
     }
 }
 
-pub fn hex_to_bytes_option(hex: Option<String>) -> Option<ByteSeq> {
-    hex.map(|s| ByteSeq::from_hex(&s))
+pub fn hex_to_bytes_option(hex: Option<String>) -> Option<Bytes> {
+    hex.map(|s| Bytes::from_hex(&s))
 }
 
 fn setup_r(
     mode: Mode,
     config: HPKEConfig,
-    kat_enc: &ByteSeq,
-    sk_rm: &ByteSeq,
-    info: &ByteSeq,
-    psk: Option<&ByteSeq>,
-    psk_id: Option<&ByteSeq>,
-    pk_sm: Option<&ByteSeq>,
-) -> (Seq<U8>, Seq<U8>, u32, Seq<U8>) {
+    kat_enc: &Bytes,
+    sk_rm: &Bytes,
+    info: &Bytes,
+    psk: Option<&Bytes>,
+    psk_id: Option<&Bytes>,
+    pk_sm: Option<&Bytes>,
+) -> (Bytes, Bytes, u32, Bytes) {
     match mode {
         mode_base => SetupBaseR(config, &kat_enc, &sk_rm, &info),
         mode_psk => SetupPSKR(
@@ -147,13 +147,13 @@ fn setup_r(
 fn setup_s(
     mode: Mode,
     config: HPKEConfig,
-    ikm_e: ByteSeq,
-    pkR: &ByteSeq,
-    info: &ByteSeq,
-    psk: Option<&ByteSeq>,
-    psk_id: Option<&ByteSeq>,
-    sk_sm: Option<&ByteSeq>,
-) -> (Seq<U8>, (Seq<U8>, Seq<U8>, u32, Seq<U8>)) {
+    ikm_e: Bytes,
+    pkR: &Bytes,
+    info: &Bytes,
+    psk: Option<&Bytes>,
+    psk_id: Option<&Bytes>,
+    sk_sm: Option<&Bytes>,
+) -> (Bytes, (Bytes, Bytes, u32, Bytes)) {
     match mode {
         mode_base => SetupBaseS(config, pkR, info, ikm_e),
         mode_psk => SetupPSKS(config, pkR, &info, psk.unwrap(), psk_id.unwrap(), ikm_e),
@@ -219,23 +219,23 @@ fn kat(tests: Vec<HpkeTestVector>) {
         let pk_sm = pk_sm.as_ref();
         let sk_sm = hex_to_bytes_option(test.skSm.clone());
         let sk_sm = sk_sm.as_ref();
-        let info = ByteSeq::from_hex(&test.info);
+        let info = Bytes::from_hex(&test.info);
         let psk = hex_to_bytes_option(test.psk.clone());
         let psk = psk.as_ref();
         let psk_id = hex_to_bytes_option(test.psk_id.clone());
         let psk_id = psk_id.as_ref();
-        let shared_secret = ByteSeq::from_hex(&test.shared_secret);
-        let key = ByteSeq::from_hex(&test.key);
-        let nonce = ByteSeq::from_hex(&test.base_nonce);
-        let exporter_secret = ByteSeq::from_hex(&test.exporter_secret);
+        let shared_secret = Bytes::from_hex(&test.shared_secret);
+        let key = Bytes::from_hex(&test.key);
+        let nonce = Bytes::from_hex(&test.base_nonce);
+        let exporter_secret = Bytes::from_hex(&test.exporter_secret);
 
         // Input key material.
-        let ikm_r = ByteSeq::from_hex(&test.ikmR);
-        let ikm_e = ByteSeq::from_hex(&test.ikmE);
+        let ikm_r = Bytes::from_hex(&test.ikmR);
+        let ikm_e = Bytes::from_hex(&test.ikmE);
         let ikm_s = hex_to_bytes_option(test.ikmS.clone());
         let ikm_s = ikm_s.as_ref();
 
-        let empty = ByteSeq::new(0);
+        let empty = Bytes::new(0);
 
         // Use internal `key_schedule` function for KAT.
         let direct_ctx = KeySchedule(
@@ -277,7 +277,7 @@ fn kat(tests: Vec<HpkeTestVector>) {
         }
 
         // Setup sender and receiver.
-        let kat_enc = ByteSeq::from_hex(&test.enc);
+        let kat_enc = Bytes::from_hex(&test.enc);
         let pk_r = DeserializePublicKey(kem_id, &pk_rm).unwrap();
         // use kat enc
         let mut receiver_context_kat =
@@ -323,19 +323,19 @@ fn kat(tests: Vec<HpkeTestVector>) {
         // Encrypt
         for (_i, encryption) in test.encryptions.iter().enumerate() {
             println!("Test encryption {} ...", _i);
-            let aad = ByteSeq::from_hex(&encryption.aad);
-            let ptxt = ByteSeq::from_hex(&encryption.pt);
-            let ctxt_kat = ByteSeq::from_hex(&encryption.ct);
+            let aad = Bytes::from_hex(&encryption.aad);
+            let ptxt = Bytes::from_hex(&encryption.pt);
+            let ctxt_kat = Bytes::from_hex(&encryption.ct);
 
             // Test context API self-test
             let (ctxt_out, new_sender_context) =
                 ContextS_Seal(aead_id, sender_context, &aad, &ptxt).unwrap();
             sender_context = new_sender_context;
-            assert_secret_seq_eq!(ctxt_kat, ctxt_out, U8);
+            assert_eq!(ctxt_kat.to_native(), ctxt_out.to_native());
             let (ptxt_out, new_receiver_context) =
                 ContextR_Open(aead_id, receiver_context, &aad, &ctxt_out).unwrap();
             receiver_context = new_receiver_context;
-            assert_secret_seq_eq!(ptxt_out, ptxt, U8);
+            assert_eq!(ptxt_out.to_native(), ptxt.to_native());
 
             // Test single-shot API self-test
             // XXX: SLOW! 🐢
@@ -368,14 +368,14 @@ fn kat(tests: Vec<HpkeTestVector>) {
             let (ptxt_out, new_receiver_context_kat) =
                 ContextR_Open(aead_id, receiver_context_kat, &aad, &ctxt_out).unwrap();
             receiver_context_kat = new_receiver_context_kat;
-            assert_secret_seq_eq!(ptxt_out, ptxt, U8);
+            assert_eq!(ptxt_out.to_native(), ptxt.to_native());
         }
 
         // Test KAT on direct_ctx for exporters
         for (_i, export) in test.exports.iter().enumerate() {
             println!("Test exporter {} ...", _i);
-            let export_context = ByteSeq::from_hex(&export.exporter_context);
-            let export_value = ByteSeq::from_hex(&export.exported_value);
+            let export_context = Bytes::from_hex(&export.exporter_context);
+            let export_value = Bytes::from_hex(&export.exported_value);
             let length = export.L;
 
             let exported_secret =

@@ -6,7 +6,7 @@ use hacspec_lib::*;
 use hpke_errors::*;
 use libcrux::hkdf::{Algorithm, Error as CryptoError};
 
-type CryptoResult = Result<ByteSeq, CryptoError>;
+type CryptoResult = Result<Bytes, CryptoError>;
 
 /// ## Key Derivation Functions (KDFs)
 ///
@@ -46,8 +46,8 @@ pub enum KDF {
 // pub const HKDF_INVALID_OUTPUT_LENGTH: Error = 2u8;
 // pub const CRYPTO_ERROR: Error = 3u8;
 
-pub type InputKeyMaterial = ByteSeq;
-pub type Info = ByteSeq;
+pub type InputKeyMaterial = Bytes;
+pub type Info = Bytes;
 
 /// Get the numeric value of the `kdf_id`.
 ///
@@ -75,8 +75,8 @@ pub fn Nh(kdf_id: KDF) -> usize {
 /// ensures that any secrets derived in HPKE are bound to the scheme's name
 /// and version, even when possibly derived from the same Diffie-Hellman or
 /// KEM shared secret as in another scheme or version.
-fn hpke_version_label() -> ByteSeq {
-    byte_seq!(0x48u8, 0x50u8, 0x4bu8, 0x45u8, 0x2du8, 0x76u8, 0x31u8)
+fn hpke_version_label() -> Bytes {
+    create_bytes!(0x48u8, 0x50u8, 0x4bu8, 0x45u8, 0x2du8, 0x76u8, 0x31u8)
 }
 
 fn hkdf_algorithm(alg: KDF) -> Algorithm {
@@ -96,18 +96,18 @@ fn hkdf_algorithm(alg: KDF) -> Algorithm {
 /// ```
 pub fn LabeledExtract(
     alg: KDF,
-    suite_id: &ByteSeq,
-    salt: &ByteSeq,
-    label: &ByteSeq,
-    ikm: &InputKeyMaterial,
-) -> HpkeByteSeqResult {
+    suite_id: Bytes,
+    salt: &Bytes,
+    label: Bytes,
+    ikm: InputKeyMaterial,
+) -> HpkeBytesResult {
     Ok(libcrux::specs::hkdf::extract(
         hkdf_algorithm(alg),
         salt,
         &hpke_version_label()
-            .concat(suite_id)
-            .concat(label)
-            .concat(ikm),
+            .concat_owned(suite_id)
+            .concat_owned(label)
+            .concat_owned(ikm),
     ))
 }
 
@@ -121,30 +121,31 @@ pub fn LabeledExtract(
 /// ```
 pub fn LabeledExpand(
     alg: KDF,
-    suite_id: &ByteSeq,
-    prk: &ByteSeq,
-    label: &ByteSeq,
-    info: &Info,
+    suite_id: Bytes,
+    prk: &Bytes,
+    label: Bytes,
+    info: Info,
     L: usize,
-) -> HpkeByteSeqResult {
+) -> HpkeBytesResult {
     if L > (255 * Nh(alg)) {
         // This check is mentioned explicitly in the spec because because it
         // must be adhered to when exporting secrets.
         // The check comes from HKDF and will be performed there again.
-        HpkeByteSeqResult::Err(HpkeError::InvalidParameters)
+        HpkeBytesResult::Err(HpkeError::InvalidParameters)
     } else {
         match libcrux::specs::hkdf::expand(
             hkdf_algorithm(alg),
             prk,
-            &U16_to_be_bytes(U16(L as u16))
-                .concat(&hpke_version_label())
-                .concat(suite_id)
-                .concat(label)
-                .concat(info),
+            &U16(L as u16)
+                .into_bytes()
+                .concat_owned(hpke_version_label())
+                .concat_owned(suite_id)
+                .concat_owned(label)
+                .concat_owned(info),
             L,
         ) {
-            CryptoResult::Ok(r) => HpkeByteSeqResult::Ok(r),
-            CryptoResult::Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
+            CryptoResult::Ok(r) => HpkeBytesResult::Ok(r),
+            CryptoResult::Err(_) => HpkeBytesResult::Err(HpkeError::CryptoError),
         }
     }
 }

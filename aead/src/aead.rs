@@ -115,10 +115,10 @@ pub fn Nn(aead_id: AEAD) -> usize {
 }
 
 /// An AEAD key is a sequence of bytes.
-pub type Key = ByteSeq;
+pub type Key = Bytes;
 
 /// An AEAD nonce is a sequence of bytes.
-pub type Nonce = ByteSeq;
+pub type Nonce = Bytes;
 
 fn alg_for_aead(aead_id: AEAD) -> AeadAlgResult {
     match aead_id {
@@ -136,13 +136,13 @@ pub fn AeadSeal(
     aead_id: AEAD,
     key: &Key,
     nonce: &Nonce,
-    aad: &Seq<U8>,
-    pt: &Seq<U8>,
-) -> HpkeByteSeqResult {
+    aad: &Bytes,
+    pt: &Bytes,
+) -> HpkeBytesResult {
     let algorithm = alg_for_aead(aead_id)?;
     match encrypt(algorithm, key, pt, nonce.clone(), aad) {
-        Ok((ct, tag)) => HpkeByteSeqResult::Ok(ct.concat_owned(tag)),
-        Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
+        Ok((ct, tag)) => HpkeBytesResult::Ok(ct.concat_owned(tag)),
+        Err(_) => HpkeBytesResult::Err(HpkeError::CryptoError),
     }
 }
 
@@ -154,13 +154,13 @@ pub fn AeadOpen(
     aead_id: AEAD,
     key: &Key,
     nonce: &Nonce,
-    aad: &ByteSeq,
-    ct: &ByteSeq,
-) -> HpkeByteSeqResult {
+    aad: &Bytes,
+    ct: &Bytes,
+) -> HpkeBytesResult {
     let algorithm = alg_for_aead(aead_id)?;
     let (ct, tag) = ct.clone().split_off(ct.len() - Nt(aead_id));
     match decrypt(algorithm, key, &ct, nonce.clone(), aad, &tag) {
-        Ok(pt) => HpkeByteSeqResult::Ok(pt),
-        Err(_) => HpkeByteSeqResult::Err(HpkeError::CryptoError),
+        Ok(pt) => HpkeBytesResult::Ok(pt),
+        Err(_) => HpkeBytesResult::Err(HpkeError::CryptoError),
     }
 }

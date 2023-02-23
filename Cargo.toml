@@ -14,3 +14,9 @@ default-members = [
     "kdf",
     "kem",
 ]
+
+[patch."ssh://git@github.com/hacspec/rwc-2023-talk.git"]
+libcrux = { path = "../rwc-2023-talk/libcrux" }
+
+[patch.'https://github.com/hacspec/hacspec']
+hacspec-lib = { path = "../hacspec/lib", features = ["release"] }

@@ -7,7 +7,7 @@ edition = "2018"
 path = "src/kdf.rs"
 
 [dependencies]
-hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }
+hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib", branch = "fake-secret-bytes" }
 libcrux = { git = "ssh://git@github.com/hacspec/rwc-2023-talk.git", features = ["hacspec"] }
 
 hpke_errors = { path = "../errors" }

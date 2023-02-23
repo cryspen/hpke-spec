@@ -7,4 +7,4 @@ edition = "2021"
 path = "src/errors.rs"
 
 [dependencies]
-hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }
+hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib", branch = "fake-secret-bytes" }

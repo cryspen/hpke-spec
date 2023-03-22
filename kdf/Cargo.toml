@@ -8,10 +8,6 @@ path = "src/kdf.rs"
 
 [dependencies]
 hacspec-lib = { git = "https://github.com/hacspec/hacspec", package = "hacspec-lib" }
-hacspec_cryptolib = { path = "../hacspec_cryptolib" }
-evercrypt_cryptolib = { path = "../evercrypt_cryptolib", optional = true }
+libcrux = { git = "ssh://git@github.com/hacspec/rwc-2023-talk.git", features = ["hacspec"] }
 
 hpke_errors = { path = "../errors" }
-
-[features]
-evercrypt = ["evercrypt_cryptolib"]

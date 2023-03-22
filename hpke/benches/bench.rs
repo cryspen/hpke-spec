@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use hacspec_lib::ByteSeq;
+use hacspec_lib::Bytes;
 use hpke::*;
 use hpke_aead::*;
 use hpke_kdf::KDF;
@@ -48,15 +48,15 @@ fn benchmark() {
 
                     let mut randomness = [0u8; 32];
                     OsRng.fill_bytes(&mut randomness);
-                    let randomness = ByteSeq::from_public_slice(&randomness);
+                    let randomness = Bytes::from_public_slice(&randomness);
                     let (_sk, enc) = GenerateKeyPair(kem_mode, randomness).unwrap();
                     let mut randomness = [0u8; 32];
                     OsRng.fill_bytes(&mut randomness);
-                    let randomness = ByteSeq::from_public_slice(&randomness);
+                    let randomness = Bytes::from_public_slice(&randomness);
                     let (sk_rm, pk_rm) = GenerateKeyPair(kem_mode, randomness).unwrap();
-                    let info = ByteSeq::from_hex("4f6465206f6e2061204772656369616e2055726e");
+                    let info = Bytes::from_hex("4f6465206f6e2061204772656369616e2055726e");
                     let psk = if hpke_mode == Mode::mode_auth_psk || hpke_mode == Mode::mode_psk {
-                        Some(ByteSeq::from_hex(
+                        Some(Bytes::from_hex(
                             "0247fd33b913760fa1fa51e1892d9f307fbe65eb171e8132c2af18555a738b82",
                         ))
                     } else {
@@ -64,7 +64,7 @@ fn benchmark() {
                     };
                     let psk_id = if hpke_mode == Mode::mode_auth_psk || hpke_mode == Mode::mode_psk
                     {
-                        Some(ByteSeq::from_hex(
+                        Some(Bytes::from_hex(
                             "456e6e796e20447572696e206172616e204d6f726961",
                         ))
                     } else {
@@ -74,7 +74,7 @@ fn benchmark() {
                         if hpke_mode == Mode::mode_auth_psk || hpke_mode == Mode::mode_auth {
                             let mut randomness = [0u8; 32];
                             OsRng.fill_bytes(&mut randomness);
-                            let randomness = ByteSeq::from_public_slice(&randomness);
+                            let randomness = Bytes::from_public_slice(&randomness);
                             let (sk, pk) = GenerateKeyPair(kem_mode, randomness).unwrap();
                             (Some(pk), Some(sk))
                         } else {
@@ -85,34 +85,34 @@ fn benchmark() {
 
                     let mut randomness = [0u8; 32];
                     OsRng.fill_bytes(&mut randomness);
-                    let randomness = ByteSeq::from_public_slice(&randomness);
+                    let randomness = Bytes::from_public_slice(&randomness);
                     let start = Instant::now();
                     for _ in 0..ITERATIONS {
                         let _sender = match hpke_mode {
                             Mode::mode_base => {
-                                SetupBaseS(config, &pk_rm, &info, randomness.clone())
+                                SetupBaseS(config, &pk_rm, info.clone(), randomness.clone())
                             }
                             Mode::mode_psk => SetupPSKS(
                                 config,
                                 &pk_rm,
-                                &info,
-                                &psk.clone().unwrap(),
-                                &psk_id.clone().unwrap(),
+                                info.clone(),
+                                psk.clone().unwrap(),
+                                psk_id.clone().unwrap(),
                                 randomness.clone(),
                             ),
                             Mode::mode_auth => SetupAuthS(
                                 config,
                                 &pk_rm,
-                                &info,
+                                info.clone(),
                                 &sk_sm.clone().unwrap(),
                                 randomness.clone(),
                             ),
                             Mode::mode_auth_psk => SetupAuthPSKS(
                                 config,
                                 &pk_rm,
-                                &info,
-                                &psk.clone().unwrap(),
-                                &psk_id.clone().unwrap(),
+                                info.clone(),
+                                psk.clone().unwrap(),
+                                psk_id.clone().unwrap(),
                                 &sk_sm.clone().unwrap(),
                                 randomness.clone(),
                             ),
@@ -126,25 +126,29 @@ fn benchmark() {
                     let start = Instant::now();
                     for _ in 0..ITERATIONS {
                         let _receiver = match hpke_mode {
-                            Mode::mode_base => SetupBaseR(config, &enc, &sk_rm, &info),
+                            Mode::mode_base => SetupBaseR(config, &enc, &sk_rm, info.clone()),
                             Mode::mode_psk => SetupPSKR(
                                 config,
                                 &enc,
                                 &sk_rm,
-                                &info,
-                                &psk.clone().unwrap(),
-                                &psk_id.clone().unwrap(),
+                                info.clone(),
+                                psk.clone().unwrap(),
+                                psk_id.clone().unwrap(),
                             ),
-                            Mode::mode_auth => {
-                                SetupAuthR(config, &enc, &sk_rm, &info, &sk_sm.clone().unwrap())
-                            }
+                            Mode::mode_auth => SetupAuthR(
+                                config,
+                                &enc,
+                                &sk_rm,
+                                info.clone(),
+                                &sk_sm.clone().unwrap(),
+                            ),
                             Mode::mode_auth_psk => SetupAuthPSKR(
                                 config,
                                 &enc,
                                 &sk_rm,
-                                &info,
-                                &psk.clone().unwrap(),
-                                &psk_id.clone().unwrap(),
+                                info.clone(),
+                                psk.clone().unwrap(),
+                                psk_id.clone().unwrap(),
                                 &sk_sm.clone().unwrap(),
                             ),
                         }
@@ -155,28 +159,30 @@ fn benchmark() {
                     println!("\tSetup Receiver: {}μs", time / (ITERATIONS as f64));
 
                     let (enc, mut context) = match hpke_mode {
-                        Mode::mode_base => SetupBaseS(config, &pk_rm, &info, randomness.clone()),
+                        Mode::mode_base => {
+                            SetupBaseS(config, &pk_rm, info.clone(), randomness.clone())
+                        }
                         Mode::mode_psk => SetupPSKS(
                             config,
                             &pk_rm,
-                            &info,
-                            &psk.clone().unwrap(),
-                            &psk_id.clone().unwrap(),
+                            info.clone(),
+                            psk.clone().unwrap(),
+                            psk_id.clone().unwrap(),
                             randomness.clone(),
                         ),
                         Mode::mode_auth => SetupAuthS(
                             config,
                             &pk_rm,
-                            &info,
+                            info.clone(),
                             &sk_sm.clone().unwrap(),
                             randomness.clone(),
                         ),
                         Mode::mode_auth_psk => SetupAuthPSKS(
                             config,
                             &pk_rm,
-                            &info,
-                            &psk.clone().unwrap(),
-                            &psk_id.clone().unwrap(),
+                            info.clone(),
+                            psk.clone().unwrap(),
+                            psk_id.clone().unwrap(),
                             &sk_sm.clone().unwrap(),
                             randomness.clone(),
                         ),
@@ -185,10 +191,10 @@ fn benchmark() {
 
                     let mut aad = vec![0u8; AEAD_AAD];
                     OsRng.fill_bytes(&mut aad);
-                    let aad = ByteSeq::from_public_slice(&aad);
+                    let aad = Bytes::from_public_slice(&aad);
                     let mut ptxt = vec![0u8; AEAD_PAYLOAD];
                     OsRng.fill_bytes(&mut ptxt);
-                    let ptxt = ByteSeq::from_public_slice(&ptxt);
+                    let ptxt = Bytes::from_public_slice(&ptxt);
 
                     let mut ctxts = Vec::with_capacity((AEAD_PAYLOAD + 16) * ITERATIONS);
                     let start = Instant::now();
@@ -208,25 +214,25 @@ fn benchmark() {
                     );
 
                     let mut receiver_context = match hpke_mode {
-                        Mode::mode_base => SetupBaseR(config, &enc, &sk_rm, &info),
+                        Mode::mode_base => SetupBaseR(config, &enc, &sk_rm, info.clone()),
                         Mode::mode_psk => SetupPSKR(
                             config,
                             &enc,
                             &sk_rm,
-                            &info,
-                            &psk.clone().unwrap(),
-                            &psk_id.clone().unwrap(),
+                            info.clone(),
+                            psk.clone().unwrap(),
+                            psk_id.clone().unwrap(),
                         ),
                         Mode::mode_auth => {
-                            SetupAuthR(config, &enc, &sk_rm, &info, &pk_sm.clone().unwrap())
+                            SetupAuthR(config, &enc, &sk_rm, info.clone(), &pk_sm.clone().unwrap())
                         }
                         Mode::mode_auth_psk => SetupAuthPSKR(
                             config,
                             &enc,
                             &sk_rm,
-                            &info,
-                            &psk.clone().unwrap(),
-                            &psk_id.clone().unwrap(),
+                            info.clone(),
+                            psk.clone().unwrap(),
+                            psk_id.clone().unwrap(),
                             &pk_sm.clone().unwrap(),
                         ),
                     }
@@ -252,21 +258,21 @@ fn benchmark() {
 
                     let mut aad = vec![0u8; AEAD_AAD];
                     OsRng.fill_bytes(&mut aad);
-                    let aad = ByteSeq::from_public_slice(&aad);
+                    let aad = Bytes::from_public_slice(&aad);
                     let mut ptxt = vec![0u8; AEAD_PAYLOAD];
                     OsRng.fill_bytes(&mut ptxt);
-                    let ptxt = ByteSeq::from_public_slice(&ptxt);
+                    let ptxt = Bytes::from_public_slice(&ptxt);
                     let mut randomness = [0u8; 32];
                     OsRng.fill_bytes(&mut randomness);
-                    let randomness = ByteSeq::from_public_slice(&randomness);
+                    let randomness = Bytes::from_public_slice(&randomness);
 
-                    let mut ctxt = HPKECiphertext(ByteSeq::new(0), ByteSeq::new(0));
+                    let mut ctxt = HPKECiphertext(Bytes::new(0), Bytes::new(0));
                     let start = Instant::now();
                     for _ in 0..ITERATIONS {
                         ctxt = HpkeSeal(
                             config,
                             &pk_rm,
-                            &info,
+                            info.clone(),
                             &aad,
                             &ptxt,
                             psk.clone(),
@@ -285,14 +291,14 @@ fn benchmark() {
                         time / (ITERATIONS as f64)
                     );
 
-                    let mut ptxt_out = ByteSeq::new(0);
+                    let mut ptxt_out = Bytes::new(0);
                     let start = Instant::now();
                     for _ in 0..ITERATIONS {
                         ptxt_out = HpkeOpen(
                             config,
                             &ctxt,
                             &sk_rm,
-                            &info,
+                            info.clone(),
                             &aad,
                             psk.clone(),
                             psk_id.clone(),

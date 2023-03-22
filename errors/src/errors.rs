@@ -97,5 +97,5 @@ pub enum HpkeError {
     CryptoError,
 }
 
-/// A [`Result`] type that returns a [`ByteSeq`] or an [`HpkeError`].
-pub type HpkeByteSeqResult = Result<ByteSeq, HpkeError>;
+/// A [`Result`] type that returns a [`Bytes`] or an [`HpkeError`].
+pub type HpkeBytesResult = Result<Bytes, HpkeError>;

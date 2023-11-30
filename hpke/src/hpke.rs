@@ -806,7 +806,7 @@ pub fn Context_Export(
     )
 }
 
-// === Singe-Shot API ===
+// === Single-Shot API ===
 
 /// ## Encryption
 ///
